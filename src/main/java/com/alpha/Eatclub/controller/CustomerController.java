@@ -1,4 +1,4 @@
-package com.alpha.Eatclubcontroller;
+package com.alpha.Eatclub.controller;
 
 import java.util.List;
 

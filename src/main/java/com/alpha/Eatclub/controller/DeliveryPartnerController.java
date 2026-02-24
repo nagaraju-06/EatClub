@@ -1,6 +1,6 @@
 
 
-package com.alpha.Eatclubcontroller;
+package com.alpha.Eatclub.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
