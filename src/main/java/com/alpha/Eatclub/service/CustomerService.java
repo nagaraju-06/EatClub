@@ -12,9 +12,11 @@ import com.alpha.Eatclub.dto.ResponseStructure;
 import com.alpha.Eatclub.entity.CartItem;
 import com.alpha.Eatclub.entity.Customer;
 import com.alpha.Eatclub.entity.Item;
+import com.alpha.Eatclub.entity.Restaurant;
 import com.alpha.Eatclub.repository.CartItemRepository;
 import com.alpha.Eatclub.repository.CustomerRepository;
 import com.alpha.Eatclub.repository.ItemRepository;
+import com.alpha.Eatclub.repository.RestaurantRepository;
 
 @Service
 public class CustomerService {
@@ -24,6 +26,8 @@ public class CustomerService {
 	private ItemRepository itemRepository;
 	@Autowired
 	private CartItemRepository cartItemRepository;
+	@Autowired
+	private RestaurantRepository restaurtantrepoo;
 
 	public ResponseEntity<ResponseStructure<Customer>> register(CustomerDTO customerdto) {
 		Customer customer = new Customer();
@@ -112,5 +116,15 @@ public class CustomerService {
 
 	    return new ResponseEntity<>(response, HttpStatus.OK);
 	}
+	
+	   public List<Restaurant> searchItemorRestaurant(long mobno, String searchKey) {
+	        Customer cust=customerRepo.findByPhone(mobno).orElseThrow(()->new RuntimeException("Customer not found"));
+	         String city=cust.getAddresses().get(0).getCity();
+	         List<Restaurant> restaurants=restaurtantrepoo.findByAddress_City(city);
+	         return restaurants.stream().filter(r->r.getMenuItems().stream()
+	                 .anyMatch(menu->menu.getName().toLowerCase().contains(searchKey.toLowerCase())) ||
+	                 r.getName().toLowerCase().contains(searchKey.toLowerCase())).toList();
 
+
+	    }
 }

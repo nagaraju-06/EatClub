@@ -60,16 +60,17 @@ public class CustomerController {
 		return customerService.addtocart(phone, itemId, quantity);
 
 	}
-	
 	@GetMapping("/customer/search")
 	public ResponseEntity<List<Restaurant>> searchItemOrRestaurant(
-	        @RequestParam String phone,
+	        @RequestParam long phone,
 	        @RequestParam String searchKey) {
 
-	    List<Restaurant> result = restaurantService.searchItemOrRestaurant(phone, searchKey);
+	    List<Restaurant> result =
+	            restaurantService.searchItemOrRestaurant(phone, searchKey);
 
-	    return new ResponseEntity<>(result, HttpStatus.OK);
+	    return ResponseEntity.ok(result);
 	}
+	
 	@GetMapping("/customer/getcart/{phone}")
 	public ResponseEntity<ResponseStructure<List<CartItem>>> getCart(@PathVariable String phone) {
 		return customerService.getCart(phone);
@@ -82,6 +83,13 @@ public class CustomerController {
 
         return orderService.placeOrder(phone, method, addressType);
     }
+	
+	
+	@GetMapping("/AddingtheItem")
+	public ResponseEntity<List<Restaurant>> searchItemOrRestaurtant(@RequestParam long mobno,@RequestParam String SearchKey){
+		List<Restaurant> result=restaurantService.searchItemOrRestaurant(mobno, SearchKey);
+		return new ResponseEntity<>(result,HttpStatus.OK);
+	}
 	
 
 }

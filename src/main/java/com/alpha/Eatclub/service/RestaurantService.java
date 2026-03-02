@@ -219,13 +219,10 @@ public class RestaurantService {
 
     // ================= SEARCH =================
 
-    public List<Restaurant> searchItemOrRestaurant(String phone, String searchKey) {
+    public List<Restaurant> searchItemOrRestaurant(long mobno, String searchKey) {
 
-        Customer customer = customerRepo.findByPhone(phone);
-
-        if (customer == null) {
-            throw new ResourceNotFoundException("Customer not found");
-        }
+        Customer customer = customerRepo.findByPhone(mobno)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
 
         if (customer.getAddresses() == null || customer.getAddresses().isEmpty()) {
             throw new ResourceNotFoundException("Customer address not found");
@@ -236,11 +233,15 @@ public class RestaurantService {
         List<Restaurant> restaurants = restaurantRepo.findByAddress_City(city);
 
         return restaurants.stream()
-                .filter(r -> r.getMenuItems() != null &&
-                        r.getMenuItems().stream()
-                                .anyMatch(menu ->
-                                        menu.getName().toLowerCase()
-                                                .contains(searchKey.toLowerCase())))
+                .filter(r -> 
+                    r.getName().toLowerCase().contains(searchKey.toLowerCase())  // restaurant name
+                    ||
+                    (r.getMenuItems() != null &&
+                     r.getMenuItems().stream()
+                            .anyMatch(menu ->
+                                menu.getName().toLowerCase()
+                                        .contains(searchKey.toLowerCase())))
+                )
                 .toList();
     }
 }
