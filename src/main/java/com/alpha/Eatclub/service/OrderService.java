@@ -24,58 +24,82 @@ public class OrderService {
 	private OrderRepository oderRepo;
 
 	public ResponseEntity<ResponseStructure<Order>> placeOrder(String phone, String method, String addressType) {
-		// TODO Auto-generated method stub
-		Customer customer = customerRepo.findByPhone(phone);
-        if (customer == null)
-            throw new RuntimeException("Customer not found");
 
-        List<CartItem> cartItems = customer.getCart();
-        
+	    // 1️⃣ Find Customer
+	    Customer customer = customerRepo.findByPhone(phone);
+	    if (customer == null) {
+	        throw new RuntimeException("Customer not found");
+	    }
 
-        if (cartItems.isEmpty())
-            throw new RuntimeException("Cart is empty");
+	    // 2️⃣ Validate Cart
+	    List<CartItem> cartItems = customer.getCart();
+	    if (cartItems == null || cartItems.isEmpty()) {
+	        throw new RuntimeException("Cart is empty");
+	    }
 
-        // Calculate total cost
-        double total = cartItems.stream()
-                .mapToDouble(item -> item.getItem().getPrice() * item.getQuantity())
-                .sum();
+	    // 3️⃣ Calculate Total Cost
+	    double total = cartItems.stream()
+	            .mapToDouble(item -> item.getItem().getPrice() * item.getQuantity())
+	            .sum();
 
-        // Create order
-        Order order = new Order();
-        order.setStatus("pending");
-        order.setCost(total);
-        if (method == "COD")
-            order.setPaymentStatus("PENDING");
-        else
-            order.setPaymentStatus("COMPLETED");
-        order.setOrderTime(LocalDateTime.now());
-        order.setDeliveryStatus("PENDING");
-        order.setRestaurant(customer.getCart().getFirst().getRestaurant());
-        order.setCustomer(customer);
-        order.setItems(cartItems);
-        order.setPickupAddress(customer.getCart().getFirst().getRestaurant().getAddress());
-       Address deliveryAddress=null;
-       for(Address a : customer.getAddresses()) {
-    	   if(a.getAddressType().equals(addressType)) {
-    		   deliveryAddress=a;
-    	   }
-       }
-       order.setDeliveryAddress(deliveryAddress);
-        
+	    // 4️⃣ Create Order
+	    Order order = new Order();
+	    order.setStatus("PENDING");
+	    order.setCost(total);
 
-        // payment status
-       
+	    // 5️⃣ Payment Logic
+	    if ("COD".equalsIgnoreCase(method)) {
+	        order.setPaymentStatus("PENDING");
+	    } else {
+	        order.setPaymentStatus("COMPLETED");
+	    }
 
-        
+	    order.setOrderTime(LocalDateTime.now());
+	    order.setDeliveryStatus("PENDING");
 
-        // response
-        ResponseStructure<Order> response = new ResponseStructure<>();
-        response.setStatuscode(HttpStatus.ACCEPTED.value());
-        response.setMessage("Order placed successfully");
-        response.setData(order);
+	    // 6️⃣ Set Restaurant (take from first cart item)
+	    order.setRestaurant(cartItems.get(0).getRestaurant());
 
-        return ResponseEntity.ok(response);
-    
+	    // 7️⃣ Set Customer
+	    order.setCustomer(customer);
+
+	    // 8️⃣ Set Items
+	    order.setItems(cartItems);
+
+	    // 9️⃣ Set Pickup Address (Restaurant Address)
+	    order.setPickupAddress(cartItems.get(0).getRestaurant().getAddress());
+
+	    // 🔟 Find Delivery Address
+	    Address deliveryAddress = null;
+
+	    if (customer.getAddresses() != null) {
+	        for (Address a : customer.getAddresses()) {
+	            if (a.getAddressType().equalsIgnoreCase(addressType)) {
+	                deliveryAddress = a;
+	                break;
+	            }
+	        }
+	    }
+
+	    if (deliveryAddress == null) {
+	        throw new RuntimeException("Delivery address not found");
+	    }
+
+	    order.setDeliveryAddress(deliveryAddress);
+
+	    // 1️⃣1️⃣ SAVE ORDER
+	    order = oderRepo.save(order);
+
+	    // 1️⃣2️⃣ Clear Customer Cart (Very Important)
+	    cartItems.clear();
+	    customerRepo.save(customer);
+
+	    // 1️⃣3️⃣ Prepare Response
+	    ResponseStructure<Order> response = new ResponseStructure<>();
+	    response.setStatuscode(HttpStatus.ACCEPTED.value());
+	    response.setMessage("Order placed successfully");
+	    response.setData(order);
+
+	    return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
 	}
-
 }

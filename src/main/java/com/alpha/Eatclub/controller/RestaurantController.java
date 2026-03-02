@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,10 +35,11 @@ public ResponseEntity<ResponseStructure<Restaurant>> findrestaurant(@RequestPara
 	
 }
 
-@DeleteMapping("/deleterestaurant/{phoneno}")
-public ResponseEntity<ResponseStructure<Restaurant>> deleteRestaurant(@RequestParam String phone){
-	return restaurantService.deleteRestaurant(phone);
-	
+@DeleteMapping("/deleterestaurant/{phone}")
+public ResponseEntity<ResponseStructure<String>> deleteRestaurant(
+        @PathVariable String phone) {
+
+    return restaurantService.deleteRestaurant(phone);
 }
 @PatchMapping("/updatestatus{phoneno}")
 public ResponseEntity<ResponseStructure<String>> updateStatus(@RequestParam String phone){
@@ -48,7 +50,10 @@ public ResponseEntity<ResponseStructure<String>> updateItemAvailability(@Request
 	return restaurantService.updateItemAvailability(phone,itemid);
 }
 @PatchMapping("/additemtomenu/{phone}")
-public ResponseEntity<ResponseStructure<Item>> addItemToMenu(@RequestBody Item item, @RequestParam String phone) {
-	return restaurantService.addItemToMenu(item, phone);
+public ResponseEntity<ResponseStructure<Item>> addItemToMenu(
+        @RequestBody Item item,
+        @PathVariable String phone) {
+
+    return restaurantService.addItemToMenu(item, phone);
 }
 }

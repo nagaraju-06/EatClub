@@ -3,6 +3,9 @@ package com.alpha.Eatclub.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
@@ -11,7 +14,7 @@ import jakarta.validation.constraints.NotBlank;
 public class Item {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotBlank private String name;
@@ -24,8 +27,10 @@ public class Item {
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
+    @JsonBackReference
     private Restaurant restaurant;
     @ManyToMany
+    @JsonIgnore
     private List<Order> orders;
 	public Item(Long id, @NotBlank String name, String description, Double price, String type, String availability,
 			Double rating, Integer numberOfReviews, Restaurant restaurant, List<Order> orders) {

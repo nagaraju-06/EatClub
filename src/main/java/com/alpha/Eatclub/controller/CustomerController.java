@@ -61,12 +61,14 @@ public class CustomerController {
 
 	}
 	
-	@PostMapping("/customer/SearchItemOrRestaurant")
-	public ResponseEntity<List<Restaurant>> SearchItemOrRestaurant(@RequestParam String phone, @RequestParam String SearchKey ){
-		
-		List<Restaurant> result= restaurantService.SearchItemOrRestaurant(phone,SearchKey);
-		return new ResponseEntity<>(result, HttpStatus.FOUND);
-		
+	@GetMapping("/customer/search")
+	public ResponseEntity<List<Restaurant>> searchItemOrRestaurant(
+	        @RequestParam String phone,
+	        @RequestParam String searchKey) {
+
+	    List<Restaurant> result = restaurantService.searchItemOrRestaurant(phone, searchKey);
+
+	    return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	@GetMapping("/customer/getcart/{phone}")
 	public ResponseEntity<ResponseStructure<List<CartItem>>> getCart(@PathVariable String phone) {

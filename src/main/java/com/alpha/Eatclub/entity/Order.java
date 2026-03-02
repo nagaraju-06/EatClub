@@ -9,8 +9,8 @@ import java.util.List;
 public class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
 
     private String status;
     private Double cost;
@@ -49,35 +49,11 @@ public class Order {
     @OneToOne(mappedBy="order",cascade = CascadeType.ALL)
     private Payment payment;
 
-	public Order(Long id, String status, Double cost, String paymentStatus, LocalDateTime orderTime,
-			String deliveryStatus, Restaurant restaurant, Address pickupAddress, Address deliveryAddress,
-			List<CartItem> items, Customer customer, DeliveryPartner deliveryPartner, Payment payment) {
-		super();
-		this.id = id;
-		this.status = status;
-		this.cost = cost;
-		this.paymentStatus = paymentStatus;
-		this.orderTime = orderTime;
-		this.deliveryStatus = deliveryStatus;
-		this.restaurant = restaurant;
-		this.pickupAddress = pickupAddress;
-		this.deliveryAddress = deliveryAddress;
-		this.items = items;
-		this.customer = customer;
-		this.deliveryPartner = deliveryPartner;
-		this.payment = payment;
-	}
-
-	public Order() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -176,6 +152,39 @@ public class Order {
 	public void setPayment(Payment payment) {
 		this.payment = payment;
 	}
+
+	public Order(int id, String status, Double cost, String paymentStatus, LocalDateTime orderTime,
+			String deliveryStatus, Restaurant restaurant, Address pickupAddress, Address deliveryAddress,
+			List<CartItem> items, Customer customer, DeliveryPartner deliveryPartner, Payment payment) {
+		super();
+		this.id = id;
+		this.status = status;
+		this.cost = cost;
+		this.paymentStatus = paymentStatus;
+		this.orderTime = orderTime;
+		this.deliveryStatus = deliveryStatus;
+		this.restaurant = restaurant;
+		this.pickupAddress = pickupAddress;
+		this.deliveryAddress = deliveryAddress;
+		this.items = items;
+		this.customer = customer;
+		this.deliveryPartner = deliveryPartner;
+		this.payment = payment;
+	}
+
+	public Order() {
+		super();
+	}
+
+	@Override
+	public String toString() {
+		return "Order [id=" + id + ", status=" + status + ", cost=" + cost + ", paymentStatus=" + paymentStatus
+				+ ", orderTime=" + orderTime + ", deliveryStatus=" + deliveryStatus + ", restaurant=" + restaurant
+				+ ", pickupAddress=" + pickupAddress + ", deliveryAddress=" + deliveryAddress + ", items=" + items
+				+ ", customer=" + customer + ", deliveryPartner=" + deliveryPartner + ", payment=" + payment + "]";
+	}
+
+	
 
 	
 
