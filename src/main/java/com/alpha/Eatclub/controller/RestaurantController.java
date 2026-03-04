@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alpha.Eatclub.dto.ResponseStructure;
+import com.alpha.Eatclub.special.ResponseStructure;
 import com.alpha.Eatclub.dto.RestaurantDTO;
 import com.alpha.Eatclub.entity.Item;
 import com.alpha.Eatclub.entity.Restaurant;
@@ -25,35 +25,33 @@ public class RestaurantController {
 	@Autowired
 	private RestaurantService restaurantService;
 @PostMapping("/register")
-public ResponseEntity<ResponseStructure<Restaurant>> register (@RequestBody RestaurantDTO restaurantdto){
-	return restaurantService.register(restaurantdto);
+public void register (@RequestBody RestaurantDTO restaurantdto){
+	restaurantService.adding(restaurantdto);
 }
 
 @GetMapping("/findrestaurant/{phoneno}")
-public ResponseEntity<ResponseStructure<Restaurant>> findrestaurant(@RequestParam String phone){
+public ResponseEntity<ResponseStructure<Restaurant>> findrestaurant(@RequestParam long phone){
 	return restaurantService.findRestaurant(phone);
 	
 }
 
-@DeleteMapping("/deleterestaurant/{phone}")
-public ResponseEntity<ResponseStructure<String>> deleteRestaurant(
-        @PathVariable String phone) {
-
-    return restaurantService.deleteRestaurant(phone);
+@DeleteMapping("/deleterestaurant/{mobno}")
+public void deleteRestaurant(@PathVariable long mobno) {
+    restaurantService.deleteRestaurant(mobno);
 }
 @PatchMapping("/updatestatus{phoneno}")
-public ResponseEntity<ResponseStructure<String>> updateStatus(@RequestParam String phone){
-	return restaurantService.updateStatus(phone);
+public void updateStatus(@RequestParam long mobno){
+	restaurantService.updateStatus(mobno);
 	}
 @PatchMapping("/updateItemAvailability/{phoneno}/{itemid}")
-public ResponseEntity<ResponseStructure<String>> updateItemAvailability(@RequestParam String phone, @RequestParam Long itemid){
-	return restaurantService.updateItemAvailability(phone,itemid);
+public void updateItemAvailability(@RequestParam long mobno, @RequestParam int itemid){
+	restaurantService.updateItemAvailability(mobno, itemid);
 }
 @PatchMapping("/additemtomenu/{phone}")
-public ResponseEntity<ResponseStructure<Item>> addItemToMenu(
+public Restaurant addItemToMenu(
         @RequestBody Item item,
-        @PathVariable String phone) {
+        @PathVariable long phone) {
 
-    return restaurantService.addItemToMenu(item, phone);
+    return restaurantService.addtomenu(item, phone);
 }
 }

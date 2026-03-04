@@ -1,6 +1,7 @@
 package com.alpha.Eatclub.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -11,12 +12,8 @@ import com.alpha.Eatclub.entity.Restaurant;
 
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
-	Restaurant findByPhone(String phone);
-	
-	void deleteByPhone(String phone);
+    Optional<Restaurant> findByMobno(long mobno);
 
-	List<Restaurant> findByAddress_City(String city);
-
-
-
+    List<Restaurant> findByAddress_City(String city);
 }
+

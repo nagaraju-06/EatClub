@@ -9,108 +9,142 @@ import java.util.List;
 @Table(name = "customers")
 public class Customer {
 
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private int id;
 
-    @NotBlank private String name;
-    @NotBlank private String phone;
-    @Email private String email;
+    private String name;
+     
+    @Column(unique=true)
+    private long mobno;
+    @Column(unique=true)
+    private String mailid;
+
     private String gender;
 
-    @OneToMany(mappedBy="customer",cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Address> addresses;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customer_id")
+    private List<Address> address;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany( cascade = CascadeType.ALL)
     private List<Order> orders;
 
-    @ManyToMany
-    @JoinTable(
-        name = "customer_cart_items",
-        joinColumns = @JoinColumn(name = "customer_id"),
-        inverseJoinColumns = @JoinColumn(name = "item_id")
-    )
-    private List<CartItem> cart;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Item> cart;
 
-    public Customer() {}
+    @OneToMany(mappedBy = "customer",cascade=CascadeType.ALL,orphanRemoval = true)
+    private List<CartItem> cartItems;
 
-	public Customer(Long id, @NotBlank String name, @NotBlank String phone, @Email String email, String gender,
-			List<Address> addresses, List<Order> orders, List<CartItem> cart) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.phone = phone;
-		this.email = email;
-		this.gender = gender;
-		this.addresses = addresses;
-		this.orders = orders;
-		this.cart = cart;
-	}
 
-	public Long getId() {
-		return id;
-	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Customer(List<CartItem> cartItems) {
+        this.cartItems = cartItems;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public List<CartItem> getCartItems() {
+        return cartItems;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setCartItems(List<CartItem> cartItems) {
+        this.cartItems = cartItems;
+    }
 
-	public String getPhone() {
-		return phone;
-	}
+    public Customer(){
+    	
+    }
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+    public List<Address> getAddress() {
+        return address;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public void setAddress(List<Address> address) {
+        this.address = address;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    // All-fields constructor
+    public Customer( String name, long mobno, String mailid, String gender,
+                    List<Order> orders, List<Item> cart) {
+    
+        this.name = name;
+        this.mobno = mobno;
+        this.mailid = mailid;
+        this.gender = gender;
 
-	public String getGender() {
-		return gender;
-	}
+        this.orders = orders;
+        this.cart = cart;
+    }
 
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
+    // Getters and Setters
+    public int getId() {
+        return id;
+    }
 
-	public List<Address> getAddresses() {
-		return addresses;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public void setAddresses(List<Address> addresses) {
-		this.addresses = addresses;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public List<Order> getOrders() {
-		return orders;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setOrders(List<Order> orders) {
-		this.orders = orders;
-	}
+    public long getMobno() {
+        return mobno;
+    }
 
-	public List<CartItem> getCart() {
-		return cart;
-	}
+    public void setMobno( long mobno) {
+        this.mobno = mobno;
+    }
 
-	public void setCart(List<CartItem> cart) {
-		this.cart = cart;
-	}
+    public String getMailid() {
+        return mailid;
+    }
 
-	
-   
+    public void setMailid(String mailid) {
+        this.mailid = mailid;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    public List<Item> getCart() {
+        return cart;
+    }
+
+    public void setCart(List<Item> cart) {
+        this.cart = cart;
+    }
+
+    // toString override
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", mobno='" + mobno + '\'' +
+                ", mailid='" + mailid + '\'' +
+                ", gender='" + gender + '\'' +
+                ", address=" + address +
+                ", orders=" + orders +
+                ", cart=" + cart +
+                '}';
+    }
 }

@@ -5,91 +5,91 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.alpha.Eatclub.dto.CustomerDTO;
-import com.alpha.Eatclub.dto.ResponseStructure;
+import com.alpha.Eatclub.dto.CustomerReq;
+
 import com.alpha.Eatclub.entity.CartItem;
 import com.alpha.Eatclub.entity.Customer;
 import com.alpha.Eatclub.entity.Order;
 import com.alpha.Eatclub.entity.Restaurant;
 import com.alpha.Eatclub.service.CustomerService;
-import com.alpha.Eatclub.service.OrderService;
+import com.alpha.Eatclub.special.ResponseStructure;
 import com.alpha.Eatclub.service.RestaurantService;
 
 @RestController
-@RequestMapping("/customer")
 public class CustomerController {
-	@Autowired
-	private CustomerService customerService;
-	@Autowired
-	private OrderService orderService;
-     
-	@Autowired
-	private RestaurantService restaurantService;
-	
-	@PostMapping("/register")
-	public ResponseEntity<ResponseStructure<Customer>> register(@RequestBody CustomerDTO customerdto) {
-		return customerService.register(customerdto);
 
-	}
+    @Autowired
+    private CustomerService customerService;
 
-	@GetMapping("/findcustomer/{phoneno}")
-	public ResponseEntity<ResponseStructure<Customer>> findCustomer(@PathVariable String phone) {
-		return customerService.findCustomer(phone);
+    @Autowired
+    private RestaurantService restaurantService;
 
-	}
 
-	@DeleteMapping("/deletecustomer/{phoneno}")
-	public ResponseEntity<ResponseStructure<Customer>> deleteCustomer(@PathVariable String phone) {
-		return customerService.deleteCustomer(phone);
 
-	}
-
-	@PatchMapping("/addtocart/{phone}/{itemId}/{quantity}")
-	public ResponseEntity<ResponseStructure<CartItem>> addtoCart(@PathVariable String phone, @PathVariable Long itemId,
-			@PathVariable int quantity) {
-		return customerService.addtocart(phone, itemId, quantity);
-
-	}
-	@GetMapping("/customer/search")
-	public ResponseEntity<List<Restaurant>> searchItemOrRestaurant(
-	        @RequestParam long phone,
-	        @RequestParam String searchKey) {
-
-	    List<Restaurant> result =
-	            restaurantService.searchItemOrRestaurant(phone, searchKey);
-
-	    return ResponseEntity.ok(result);
-	}
-	
-	@GetMapping("/customer/getcart/{phone}")
-	public ResponseEntity<ResponseStructure<List<CartItem>>> getCart(@PathVariable String phone) {
-		return customerService.getCart(phone);
-	}
-	@PostMapping("/placeorder")
-    public ResponseEntity<ResponseStructure<Order>> placeOrder(
-            @RequestParam String phone,
-            @RequestParam String method,
-            @RequestParam String addressType) {
-
-        return orderService.placeOrder(phone, method, addressType);
+    @PostMapping("/customer/register")
+    public Customer createCustomer(@RequestBody CustomerReq customerReqDto) {
+        return customerService.saveCustomer(customerReqDto);
     }
-	
-	
-	@GetMapping("/AddingtheItem")
-	public ResponseEntity<List<Restaurant>> searchItemOrRestaurtant(@RequestParam long mobno,@RequestParam String SearchKey){
-		List<Restaurant> result=restaurantService.searchItemOrRestaurant(mobno, SearchKey);
-		return new ResponseEntity<>(result,HttpStatus.OK);
-	}
-	
+
+    @DeleteMapping("/delete/customer")
+    public void deleteCustomer(@RequestParam long mobno) {
+        customerService.deleteCustomer(mobno);
+
+    }
+
+    @GetMapping("/find/customer")
+    public ResponseEntity<Customer> findCustomer(@RequestParam long mobno) {
+        Customer c = customerService.findCustomer(mobno);
+        return new ResponseEntity<>(c, HttpStatus.OK);
+    }
+
+    @PostMapping("/customer/SearchItemOrRestaurant")
+    public ResponseEntity<List<Restaurant>> SearchItemOrRestaurant(@RequestParam long mobno, @RequestParam String SearchKey) {
+        List<Restaurant> result = restaurantService.searchItemorRestaurant(mobno, SearchKey);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PostMapping("/customer/addtocart")
+    public ResponseEntity<String> addtocart(@RequestParam long mobno, @RequestParam int Itemid, @RequestParam int quantity) {
+        customerService.addtocart(mobno, Itemid, quantity);
+        return new ResponseEntity<>("Added To Cart", HttpStatus.OK);
+
+    }
+
+    @PostMapping("/customer/addtocartt")
+    public ResponseEntity<CartItem> addtocartt(@RequestParam long mobno, @RequestParam int Itemid, @RequestParam int quantity) {
+        CartItem addtocartt = customerService.addtocartt(mobno, Itemid, quantity);
+        return new ResponseEntity<>(addtocartt, HttpStatus.OK);
+    }
+
+    @GetMapping("/customer/getCart")
+    public ResponseEntity<List<CartItem>> getAllCart(@RequestParam long mobno) {
+        List<CartItem> allCart = customerService.getAllCart(mobno);
+        return new ResponseEntity<>(allCart, HttpStatus.OK);
+
+    }
+
+    @PostMapping("/customer/placeOrder")
+    public ResponseEntity<ResponseStructure<Order>> placeOrder(@RequestParam long mobno, @RequestParam String PaymentType, @RequestParam String AddressType
+            , @RequestParam String SpecialRequest) {
+        return customerService.placingOrder(mobno, PaymentType, AddressType, SpecialRequest);
+    }
+
+    @PostMapping("/customer/ConfirmPlacingOrder")
+    public ResponseEntity<ResponseStructure<String>> confirmPlacingOrder(@RequestParam int orderid) {
+        return  customerService.confirmPlacingOrder(orderid);
+//         return new ResponseEntity<>("Order Placed Successfully", HttpStatus.OK);
+     }
+    
+    
+    @PostMapping("/customer/denyPlacingOrder")
+    public ResponseEntity<ResponseStructure<String>> denyPlacingOrder(@RequestParam int orderid) {
+        return customerService.denyPlacingOrder(orderid);
+
+    }
+    
 
 }

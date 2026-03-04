@@ -6,6 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,41 +14,25 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // ✅ Handle specific custom exception
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Object> handleResourceNotFound(ResourceNotFoundException ex) {
+	 @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+	    public ResponseEntity<String> handleSqlIntegrity(SQLIntegrityConstraintViolationException ex){
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("message", ex.getMessage());
-        response.put("status", HttpStatus.NOT_FOUND.value());
-
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-    }
-
-    // ✅ Handle validation errors (@Valid)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handleValidationException(MethodArgumentNotValidException ex) {
-
-        Map<String, String> errors = new HashMap<>();
-
-        ex.getBindingResult().getFieldErrors()
-                .forEach(error ->
-                        errors.put(error.getField(), error.getDefaultMessage())
-                );
-
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-    }
-
-    // ✅ Handle all other exceptions
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleGlobalException(Exception ex) {
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("message", ex.getMessage());
-        response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
-
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+	        return new ResponseEntity<>("Duplicate entry or Constraint Voilation.Please Check your Input Bro", HttpStatus.BAD_REQUEST);
+	    }
+	    @ExceptionHandler(ItemNotFoundException.class)
+	    public ResponseEntity<String> handleItemNotFound(ItemNotFoundException ex){
+	        return new ResponseEntity<>("Item Not Found with this ID",HttpStatus.BAD_REQUEST);
+	    }
+	    @ExceptionHandler(DifferentResturtantItem.class)
+	    public ResponseEntity<String> handleDifferentRest(DifferentResturtantItem ex){
+	        return new ResponseEntity<>("Cannot Add Item from Different Restaurant Brother",HttpStatus.BAD_REQUEST);
+	    }
+	    @ExceptionHandler(CustomerNotFound.class)
+	    public ResponseEntity<String> handleCustomer(CustomerNotFound ex){
+	        return new ResponseEntity<>("Customer Not Found with given ID Brother",HttpStatus.BAD_REQUEST);
+	    }
+	    @ExceptionHandler(OrderNotfoundException.class)
+	    public ResponseEntity<String> handeOrder(OrderNotfoundException ex){
+	        return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+	    }
 }

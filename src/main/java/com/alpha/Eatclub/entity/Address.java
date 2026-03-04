@@ -3,7 +3,7 @@ package com.alpha.Eatclub.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "address")
+
 public class Address {
 
     @Id
@@ -28,9 +28,7 @@ public class Address {
     private String addressType;
     private Boolean isDefault;
     @ManyToOne
-    @JoinColumn(name="customer_id")
-    private Customer customer;
-   
+
   
 	public Long getId() {
 		return id;
@@ -192,19 +190,10 @@ public class Address {
 	}
 
 
-	public Customer getCusstomer() {
-		return customer;
-	}
-
-
-	public void setCusstomer(Customer cusstomer) {
-		this.customer = cusstomer;
-	}
-
 
 	public Address(Long id, Double latitude, Double longitude, String flatNumber, String floor, String buildingName,
 			String street, String area, String landmark, String city, String district, String state, String country,
-			String pincode, String addressType, Boolean isDefault, Customer customer) {
+			String pincode, String addressType, Boolean isDefault) {
 		super();
 		this.id = id;
 		this.latitude = latitude;
@@ -222,7 +211,7 @@ public class Address {
 		this.pincode = pincode;
 		this.addressType = addressType;
 		this.isDefault = isDefault;
-		this.customer = customer;
+		
 	}
 
 

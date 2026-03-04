@@ -3,133 +3,127 @@ package com.alpha.Eatclub.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@Table(name = "restaurants")
+
 public class Restaurant {
+	 @Id
+	    @GeneratedValue(strategy = GenerationType.AUTO)
+	    private int id;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+	    private String name;
 
-    @NotBlank private String name;
-    @NotBlank private String phone;
-    @Email private String email;
-    private String description;
-    private int packagefees;
-    private String Status;
-   
-	private String type; 
+	    @Column(unique=true)
+	    private long mobno;
+	    
+	    @Column(unique=true)
+	    private String mailid;
 
-    @OneToMany(mappedBy="restaurant",cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Item> menuItems;
+	    @OneToOne(cascade = CascadeType.ALL)
+	    @JoinColumn(name = "address_id")
+	    private Address address;
 
-    @OneToMany(mappedBy="restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<Order> orders;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="address_id")
-    private Address address;
-	public Restaurant(Long id, @NotBlank String name, @NotBlank String phone, @Email String email, String description,
-			int packagefees, String status, String type, List<Item> menuItems, List<Order> orders, Address address) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.phone = phone;
-		this.email = email;
-		this.description = description;
-		this.packagefees = packagefees;
-		Status = status;
-		this.type = type;
-		this.menuItems = menuItems;
-		this.orders = orders;
-		this.address = address;
-	}
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getPhone() {
-		return phone;
-	}
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	public int getPackagefees() {
-		return packagefees;
-	}
-	public void setPackagefees(int packagefees) {
-		this.packagefees = packagefees;
-	}
-	public String getStatus() {
-		return Status;
-	}
-	public void setStatus(String status) {
-		Status = status;
-	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
-	public List<Item> getMenuItems() {
-		return menuItems;
-	}
-	public void setMenuItems(List<Item> menuItems) {
-		this.menuItems = menuItems;
-	}
-	public List<Order> getOrders() {
-		return orders;
-	}
-	public void setOrders(List<Order> orders) {
-		this.orders = orders;
-	}
-	public Address getAddress() {
-		return address;
-	}
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-	public Restaurant() {
-		super();
-	}
-	@Override
-	public String toString() {
-		return "Restaurant [id=" + id + ", name=" + name + ", phone=" + phone + ", email=" + email + ", description="
-				+ description + ", packagefees=" + packagefees + ", Status=" + Status + ", type=" + type
-				+ ", menuItems=" + menuItems + ", orders=" + orders + ", address=" + address + "]";
-	}
+	    @JsonIgnore
+	    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+	    private List<Item> menu=new ArrayList<>();
 
-  
+	 
+	    private String status;
 
+	    private double ratings;
 
-	
+	    private String description;
 
-    
-}
+	    @OneToMany( cascade = CascadeType.ALL)
+	    private List<Order> orders;
+
+	   
+	    private Double packagingFees;
+
+	  
+	    private String type;
+
+	    // No-arg constructor
+	    public Restaurant() {
+	    }
+
+	    // All-fields constructor
+	    public Restaurant( String name, long mobno, String mailid,
+	                      Address address, List<Item> menu, String status,
+	                      double ratings, String description, List<Order> orders,
+	                      double packagingFees, String type) {
+
+	        this.name = name;
+	        this.mobno = mobno;
+	        this.mailid = mailid;
+	        this.address = address;
+	        this.menu = menu;
+	        this.status = status;
+	        this.ratings = ratings;
+	        this.description = description;
+	        this.orders = orders;
+	        this.packagingFees = packagingFees;
+	        this.type = type;
+	    }
+
+	    // Getters and Setters
+	    public int getId() { return id; }
+	    public void setId(int id) { this.id = id; }
+
+	    public String getName() { return name; }
+	    public void setName(String name) { this.name = name; }
+
+	    public long getMobno() { return mobno; }
+	    public void setMobno(long mobno) { this.mobno = mobno; }
+
+	    public String getMailid() { return mailid; }
+	    public void setMailid(String mailid) { this.mailid = mailid; }
+
+	    public Address getAddress() { return address; }
+	    public void setAddress(Address address) { this.address = address; }
+
+	    public List<Item> getMenu() { return menu; }
+	    public void setMenu(List<Item> menu) { this.menu = menu; }
+
+	    public String getStatus() { return status; }
+	    public void setStatus(String status) { this.status = status; }
+
+	    public double getRatings() { return ratings; }
+	    public void setRatings(double ratings) { this.ratings = ratings; }
+
+	    public String getDescription() { return description; }
+	    public void setDescription(String description) { this.description = description; }
+
+	    public List<Order> getOrders() { return orders; }
+	    public void setOrders(List<Order> orders) { this.orders = orders; }
+
+	    public Double getPackagingFees() { return packagingFees; }
+	    public void setPackagingFees(Double packagingFees) { this.packagingFees = packagingFees; }
+
+	    public String getType() { return type; }
+	    public void setType(String type) { this.type = type; }
+	    @Override
+	    public String toString() {
+	        return "Restaurant{" +
+	                "id=" + id +
+	                ", name='" + name + '\'' +
+	                ", mobno='" + mobno + '\'' +
+	                ", mailid='" + mailid + '\'' +
+	                ", address=" + address +
+	                ", menu=" + menu +
+	                ", status=" + status +
+	                ", ratings=" + ratings +
+	                ", description='" + description + '\'' +
+	                ", orders=" + orders +
+	                ", packagingFees=" + packagingFees +
+	                ", type=" + type +
+	                '}';
+	    }
+
+	}

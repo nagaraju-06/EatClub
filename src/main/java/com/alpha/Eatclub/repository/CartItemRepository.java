@@ -10,6 +10,6 @@ import com.alpha.Eatclub.entity.Customer;
 @Repository
 public interface CartItemRepository extends JpaRepository<CartItem,Long>{
 
-	List<CartItem> findByCustomer(Customer customer);
+	
 
 }

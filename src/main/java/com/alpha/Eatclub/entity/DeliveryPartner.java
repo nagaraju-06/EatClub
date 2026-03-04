@@ -4,63 +4,114 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "delivery_partners")
+
 public class DeliveryPartner {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
     private String name;
-    private String phone;
+    @Column(unique=true)
+    private long mobno;
+    @Column(unique=true)
     private String email;
-    private Double rating;
+    private double rating;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
+    private Address address;
+
+    @OneToMany(mappedBy = "deliveryPartner")
+    private List<Order> orders;
+    @Column(unique=true)
+    private String vehicleNo;
     private String status;
 
-    @OneToMany(mappedBy = "deliveryPartner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Order> orders;
-    private String vehicleNo;
-
-    public DeliveryPartner() {}
-
-    public DeliveryPartner(Long id, String name, String phone, String email, Double rating, String status) {
-        this.id = id;
-        this.name = name;
-        this.phone = phone;
+    public DeliveryPartner(Address address, String email, int id, long mobno, String name,
+                           List<Order> orders, double rating, String status, String vehicleNo) {
+        this.address = address;
         this.email = email;
+        this.id = id;
+        this.mobno = mobno;
+        this.name = name;
+        this.orders = orders;
         this.rating = rating;
+        this.status = status;
+        this.vehicleNo = vehicleNo;
+    }
+
+    public DeliveryPartner() {
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public long getMobno() {
+        return mobno;
+    }
+
+    public void setMobno(long mobno) {
+        this.mobno = mobno;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
         this.status = status;
     }
 
-    // Getters & Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public String getVehicleNo() {
+        return vehicleNo;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
-
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-
-    public Double getRating() { return rating; }
-    public void setRating(Double rating) { this.rating = rating; }
-
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
-
-    public List<Order> getOrders() { return orders; }
-    public void setOrders(List<Order> orders) { this.orders = orders; }
-
-	public String getVehicleNo() {
-		return vehicleNo;
-	}
-
-	public void setVehicleNo(String vehicleNo) {
-		this.vehicleNo = vehicleNo;
-	}
-
-    
+    public void setVehicleNo(String vehicleNo) {
+        this.vehicleNo = vehicleNo;
+    }
 }

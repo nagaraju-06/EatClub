@@ -6,36 +6,87 @@ import jakarta.persistence.*;
 @Table(name = "payments")
 public class Payment {
 
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long paymentId;
+    private int id;
 
+    private double amount;
+
+
+    private String type;
+
+   
     private String status;
-    private String method;
 
     @OneToOne
     @JoinColumn(name = "order_id")
     private Order order;
 
-    public Payment() {}
+   
+    public Payment() {
+    }
 
-    public Payment(Long paymentId, String status, String method, Order order) {
-        this.paymentId = paymentId;
+    // All-fields constructor
+    public Payment( double amount,
+                   String type, String status,
+                   Order order) {
+ 
+        this.amount = amount;
+        this.type = type;
         this.status = status;
-        this.method = method;
         this.order = order;
     }
 
-    // Getters & Setters
-    public Long getPaymentId() { return paymentId; }
-    public void setPaymentId(Long paymentId) { this.paymentId = paymentId; }
+    // Getters and Setters
+    public int getId() {
+        return id;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getMethod() { return method; }
-    public void setMethod(String method) { this.method = method; }
+    public double getAmount() {
+        return amount;
+    }
 
-    public Order getOrder() { return order; }
-    public void setOrder(Order order) { this.order = order; }
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    // toString override
+    @Override
+    public String toString() {
+        return "Payment{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", type='" + type + '\'' +
+                ", status='" + status + '\'' +
+                ", order=" + order +
+                '}';
+    }
 }

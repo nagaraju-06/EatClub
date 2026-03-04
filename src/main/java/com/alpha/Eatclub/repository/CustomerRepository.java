@@ -11,9 +11,10 @@ import com.alpha.Eatclub.entity.Customer;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
-	Customer findByPhone(String phone);
+	
 
-	void deleteByPhone(String phone);
-	Optional<Customer> findByPhone(long phone);
+	Optional<Customer> findByMobno(long mobno);
+
+    
 
 }

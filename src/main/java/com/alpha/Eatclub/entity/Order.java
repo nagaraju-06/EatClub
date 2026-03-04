@@ -7,184 +7,242 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 public class Order {
+	 @Id
+	    @GeneratedValue(strategy = GenerationType.AUTO)
+	    private int id;
+	    private String status;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+	    @ManyToOne
+	    @JoinColumn(name = "restaurant_id")
+	    private Restaurant restaurant;
+	    @OneToOne
+	    private Customer customer;
+//	        @ManyToMany
+//	    private List<Order> orders;
+	    private double cost;
+	    @OneToMany
+	    private List<Item> items;
 
-    private String status;
-    private Double cost;
-    private String paymentStatus;
-    private LocalDateTime orderTime;
-    private String deliveryStatus;
+	    @OneToOne(cascade = CascadeType.ALL)
+	    @JoinColumn(name = "pickup_address_id")
+	    private Address pickupAddress;
+	    @OneToOne(cascade = CascadeType.ALL)
+	    @JoinColumn(name = "delivery_address_id")
+	    private Address deliveryAddress;
+	    private int otp;
+	    @ManyToOne
+	    @JoinColumn(name = "delivery_partner_id")
+	    private DeliveryPartner deliveryPartner;
 
-    @ManyToOne
-    @JoinColumn(name = "restaurant_id")
-    private Restaurant restaurant;
-    
-    @ManyToOne
-    @JoinColumn(name="pickup_address_id")
-    private Address pickupAddress;
-    
-    @ManyToOne
-    @JoinColumn(name="delivery_address_id")
-    private Address deliveryAddress;
+	    @OneToOne(mappedBy = "order" ,cascade = CascadeType.ALL)
+	    private Payment payment;
+	    private String estimatedTime;
 
-    @ManyToMany
-    @JoinTable(
-        name = "order_items",
-        joinColumns = @JoinColumn(name="order_id"),
-        inverseJoinColumns = @JoinColumn(name="item_id")
-    )
-    private List<CartItem> items;
+	    private Double distance;
+	    private double discount;
+	    private String coupon;
+	    private String specialRequest;
+	    private String deliveryInstructions;
+	    private LocalDateTime date;
+	    
+	    private double orderCost;
+	    private double delivery_charges;
+	    private double packagingFees;
+	    private double tax;
+	    private double platformFees;
+	    private double totalCost;
+		public int getId() {
+			return id;
+		}
+		public void setId(int id) {
+			this.id = id;
+		}
+		public String getStatus() {
+			return status;
+		}
+		public void setStatus(String status) {
+			this.status = status;
+		}
+		public Restaurant getRestaurant() {
+			return restaurant;
+		}
+		public void setRestaurant(Restaurant restaurant) {
+			this.restaurant = restaurant;
+		}
+		public Customer getCustomer() {
+			return customer;
+		}
+		public void setCustomer(Customer customer) {
+			this.customer = customer;
+		}
+		public double getCost() {
+			return cost;
+		}
+		public void setCost(double cost) {
+			this.cost = cost;
+		}
+		public List<Item> getItems() {
+			return items;
+		}
+		public void setItems(List<Item> items) {
+			this.items = items;
+		}
+		public Address getPickupAddress() {
+			return pickupAddress;
+		}
+		public void setPickupAddress(Address pickupAddress) {
+			this.pickupAddress = pickupAddress;
+		}
+		public Address getDeliveryAddress() {
+			return deliveryAddress;
+		}
+		public void setDeliveryAddress(Address deliveryAddress) {
+			this.deliveryAddress = deliveryAddress;
+		}
+		public int getOtp() {
+			return otp;
+		}
+		public void setOtp(int otp) {
+			this.otp = otp;
+		}
+		public DeliveryPartner getDeliveryPartner() {
+			return deliveryPartner;
+		}
+		public void setDeliveryPartner(DeliveryPartner deliveryPartner) {
+			this.deliveryPartner = deliveryPartner;
+		}
+		public Payment getPayment() {
+			return payment;
+		}
+		public void setPayment(Payment payment) {
+			this.payment = payment;
+		}
+		public String getEstimatedTime() {
+			return estimatedTime;
+		}
+		public void setEstimatedTime(String estimatedTime) {
+			this.estimatedTime = estimatedTime;
+		}
+		public Double getDistance() {
+			return distance;
+		}
+		public void setDistance(Double distance) {
+			this.distance = distance;
+		}
+		public double getDiscount() {
+			return discount;
+		}
+		public void setDiscount(double discount) {
+			this.discount = discount;
+		}
+		public String getCoupon() {
+			return coupon;
+		}
+		public void setCoupon(String coupon) {
+			this.coupon = coupon;
+		}
+		public String getSpecialRequest() {
+			return specialRequest;
+		}
+		public void setSpecialRequest(String specialRequest) {
+			this.specialRequest = specialRequest;
+		}
+		public String getDeliveryInstructions() {
+			return deliveryInstructions;
+		}
+		public void setDeliveryInstructions(String deliveryInstructions) {
+			this.deliveryInstructions = deliveryInstructions;
+		}
+		public LocalDateTime getDate() {
+			return date;
+		}
+		public void setDate(LocalDateTime date) {
+			this.date = date;
+		}
+		public double getOrderCost() {
+			return orderCost;
+		}
+		public void setOrderCost(double orderCost) {
+			this.orderCost = orderCost;
+		}
+		public double getDelivery_charges() {
+			return delivery_charges;
+		}
+		public void setDelivery_charges(double delivery_charges) {
+			this.delivery_charges = delivery_charges;
+		}
+		public double getPackagingFees() {
+			return packagingFees;
+		}
+		public void setPackagingFees(double packagingFees) {
+			this.packagingFees = packagingFees;
+		}
+		public double getTax() {
+			return tax;
+		}
+		public void setTax(double tax) {
+			this.tax = tax;
+		}
+		public double getPlatformFees() {
+			return platformFees;
+		}
+		public void setPlatformFees(double platformFees) {
+			this.platformFees = platformFees;
+		}
+		public double getTotalCost() {
+			return totalCost;
+		}
+		public void setTotalCost(double totalCost) {
+			this.totalCost = totalCost;
+		}
+		public Order(int id, String status, Restaurant restaurant, Customer customer, double cost, List<Item> items,
+				Address pickupAddress, Address deliveryAddress, int otp, DeliveryPartner deliveryPartner,
+				Payment payment, String estimatedTime, Double distance, double discount, String coupon,
+				String specialRequest, String deliveryInstructions, LocalDateTime date, double orderCost,
+				double delivery_charges, double packagingFees, double tax, double platformFees, double totalCost) {
+			super();
+			this.id = id;
+			this.status = status;
+			this.restaurant = restaurant;
+			this.customer = customer;
+			this.cost = cost;
+			this.items = items;
+			this.pickupAddress = pickupAddress;
+			this.deliveryAddress = deliveryAddress;
+			this.otp = otp;
+			this.deliveryPartner = deliveryPartner;
+			this.payment = payment;
+			this.estimatedTime = estimatedTime;
+			this.distance = distance;
+			this.discount = discount;
+			this.coupon = coupon;
+			this.specialRequest = specialRequest;
+			this.deliveryInstructions = deliveryInstructions;
+			this.date = date;
+			this.orderCost = orderCost;
+			this.delivery_charges = delivery_charges;
+			this.packagingFees = packagingFees;
+			this.tax = tax;
+			this.platformFees = platformFees;
+			this.totalCost = totalCost;
+		}
+		public Order() {
+			super();
+		}
+		@Override
+		public String toString() {
+			return "Order [id=" + id + ", status=" + status + ", restaurant=" + restaurant + ", customer=" + customer
+					+ ", cost=" + cost + ", items=" + items + ", pickupAddress=" + pickupAddress + ", deliveryAddress="
+					+ deliveryAddress + ", otp=" + otp + ", deliveryPartner=" + deliveryPartner + ", payment=" + payment
+					+ ", estimatedTime=" + estimatedTime + ", distance=" + distance + ", discount=" + discount
+					+ ", coupon=" + coupon + ", specialRequest=" + specialRequest + ", deliveryInstructions="
+					+ deliveryInstructions + ", date=" + date + ", orderCost=" + orderCost + ", delivery_charges="
+					+ delivery_charges + ", packagingFees=" + packagingFees + ", tax=" + tax + ", platformFees="
+					+ platformFees + ", totalCost=" + totalCost + "]";
+		}
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
 
-    @ManyToOne
-    @JoinColumn(name = "delivery_partner_id")
-    private DeliveryPartner deliveryPartner;
-
-    @OneToOne(mappedBy="order",cascade = CascadeType.ALL)
-    private Payment payment;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public Double getCost() {
-		return cost;
-	}
-
-	public void setCost(Double cost) {
-		this.cost = cost;
-	}
-
-	public String getPaymentStatus() {
-		return paymentStatus;
-	}
-
-	public void setPaymentStatus(String paymentStatus) {
-		this.paymentStatus = paymentStatus;
-	}
-
-	public LocalDateTime getOrderTime() {
-		return orderTime;
-	}
-
-	public void setOrderTime(LocalDateTime orderTime) {
-		this.orderTime = orderTime;
-	}
-
-	public String getDeliveryStatus() {
-		return deliveryStatus;
-	}
-
-	public void setDeliveryStatus(String deliveryStatus) {
-		this.deliveryStatus = deliveryStatus;
-	}
-
-	public Restaurant getRestaurant() {
-		return restaurant;
-	}
-
-	public void setRestaurant(Restaurant restaurant) {
-		this.restaurant = restaurant;
-	}
-
-	public Address getPickupAddress() {
-		return pickupAddress;
-	}
-
-	public void setPickupAddress(Address pickupAddress) {
-		this.pickupAddress = pickupAddress;
-	}
-
-	public Address getDeliveryAddress() {
-		return deliveryAddress;
-	}
-
-	public void setDeliveryAddress(Address deliveryAddress) {
-		this.deliveryAddress = deliveryAddress;
-	}
-
-	public List<CartItem> getItems() {
-		return items;
-	}
-
-	public void setItems(List<CartItem> items) {
-		this.items = items;
-	}
-
-	public Customer getCustomer() {
-		return customer;
-	}
-
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
-
-	public DeliveryPartner getDeliveryPartner() {
-		return deliveryPartner;
-	}
-
-	public void setDeliveryPartner(DeliveryPartner deliveryPartner) {
-		this.deliveryPartner = deliveryPartner;
-	}
-
-	public Payment getPayment() {
-		return payment;
-	}
-
-	public void setPayment(Payment payment) {
-		this.payment = payment;
-	}
-
-	public Order(int id, String status, Double cost, String paymentStatus, LocalDateTime orderTime,
-			String deliveryStatus, Restaurant restaurant, Address pickupAddress, Address deliveryAddress,
-			List<CartItem> items, Customer customer, DeliveryPartner deliveryPartner, Payment payment) {
-		super();
-		this.id = id;
-		this.status = status;
-		this.cost = cost;
-		this.paymentStatus = paymentStatus;
-		this.orderTime = orderTime;
-		this.deliveryStatus = deliveryStatus;
-		this.restaurant = restaurant;
-		this.pickupAddress = pickupAddress;
-		this.deliveryAddress = deliveryAddress;
-		this.items = items;
-		this.customer = customer;
-		this.deliveryPartner = deliveryPartner;
-		this.payment = payment;
-	}
-
-	public Order() {
-		super();
-	}
-
-	@Override
-	public String toString() {
-		return "Order [id=" + id + ", status=" + status + ", cost=" + cost + ", paymentStatus=" + paymentStatus
-				+ ", orderTime=" + orderTime + ", deliveryStatus=" + deliveryStatus + ", restaurant=" + restaurant
-				+ ", pickupAddress=" + pickupAddress + ", deliveryAddress=" + deliveryAddress + ", items=" + items
-				+ ", customer=" + customer + ", deliveryPartner=" + deliveryPartner + ", payment=" + payment + "]";
-	}
-
-	
+	    
 
 	
 

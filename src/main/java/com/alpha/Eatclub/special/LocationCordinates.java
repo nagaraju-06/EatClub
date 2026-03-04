@@ -1,4 +1,4 @@
-package com.alpha.Eatclub.dto;
+package com.alpha.Eatclub.special;
 
 public class LocationCordinates {
 	private double longitude;
