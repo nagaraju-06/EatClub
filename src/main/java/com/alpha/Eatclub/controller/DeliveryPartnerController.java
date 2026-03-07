@@ -2,6 +2,8 @@
 
 package com.alpha.Eatclub.controller;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -9,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alpha.Eatclub.dto.DeliveryPartnerDTO;
 import com.alpha.Eatclub.entity.DeliveryPartner;
+import com.alpha.Eatclub.entity.Restaurant;
 import com.alpha.Eatclub.service.DeliveryPartnerService;
 import com.alpha.Eatclub.service.RedisService;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 	@RequestMapping("/deliverypartner")
@@ -32,7 +38,7 @@ import com.alpha.Eatclub.service.RedisService;
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
-    @PostMapping("/deliveryPartner/register")
+    @PostMapping("/register")
     public void adding(@RequestBody DeliveryPartnerDTO deliveryPartnerDto) {
         deliveryPartnerService.adding(deliveryPartnerDto);
     }
@@ -62,6 +68,33 @@ import com.alpha.Eatclub.service.RedisService;
 
         return accepted ? "Order Assigned Successfully" : "Order Already Taken";
     }
+    
+    @GetMapping("/deliveryPartner/getDirectionToRest")
+    public void getDirectionToRest(@RequestParam Integer partnerId,
+                                   @RequestParam double restlat, @RequestParam double restlong,
+                                   HttpServletResponse resp) throws IOException {
+         deliveryPartnerService.getDirectionToRest(partnerId, restlat, restlong, resp);
+         
+    }
+    
 
+    @GetMapping("/deliveryPartner/getDirectionToCust")
+    public void getDirectionToCust(@RequestParam double restlat,@RequestParam double restlon,@RequestParam double custlat
+                                   ,@RequestParam double custlong,HttpServletResponse rest) throws IOException {
+         deliveryPartnerService.getDirectionToCust(restlat,restlon,custlat,custlong,rest);
+    }
+
+    @PatchMapping("/deliveryPartner/markOrderAsDelivered")
+    public ResponseEntity<String> markOrderAsDelivered(
+            @RequestParam long dpMob,
+            @RequestParam long orderId,
+            @RequestParam int otp) {
+
+        deliveryPartnerService.markOrderAsDelivered(dpMob, orderId, otp);
+
+        return new ResponseEntity<>("Order Delivered Successfully", HttpStatus.OK);
+    }
+    
+    
 }
 	

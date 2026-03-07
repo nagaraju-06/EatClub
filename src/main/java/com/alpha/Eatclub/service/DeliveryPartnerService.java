@@ -15,7 +15,14 @@ import com.alpha.Eatclub.entity.Order;
 import com.alpha.Eatclub.repository.AddressRepository;
 import com.alpha.Eatclub.repository.DeliveryPartnerRepository;
 import com.alpha.Eatclub.repository.OrderRepository;
+
+import jakarta.servlet.http.HttpServletResponse;
+
 import javax.print.DocFlavor;
+import org.springframework.data.geo.Point;
+
+import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 @Service
 public class DeliveryPartnerService {
@@ -53,6 +60,29 @@ public class DeliveryPartnerService {
 
         deliveryPartnerRepository.save(deliveryPartner);
     }
+    
+
+    public void getDirectionToRest(Integer partnerId, double restlat,
+                                   double restlong, HttpServletResponse resp) throws IOException {
+
+        String key="deliverypartner:location";
+        List<Point> points = redisTemplate.opsForGeo().position(key, partnerId.toString());
+
+        if(points== null || points.isEmpty()){
+            throw new RuntimeException("Delivery Partner Location not found");
+        }
+              Point p =points.get(0);
+        double  dplon= p.getX();
+       double dplat= p.getY();
+
+
+        String getdir="https://www.google.com/maps/dir/?api=1&origin="+dplat+","+dplon+"&destination="+restlat+
+                ","+restlong+"&travelmode=driving";
+        resp.sendRedirect(getdir);
+
+    }
+    
+    
 
     public void deletePartner(long mobno) {
     	DeliveryPartner d = deliveryPartnerRepository.findByMobno(mobno)
@@ -87,5 +117,26 @@ public class DeliveryPartnerService {
             return true;
         }
         return false;
+    }
+
+    public void getDirectionToCust(double restlat, double restlon, double custlat, double custlong, HttpServletResponse rest) throws IOException {
+
+        String getdir="https://www.google.com/maps/dir/?api=1&origin="+restlat+","+restlon+"&destination="+custlat+
+                ","+custlong+"&travelmode=driving";
+        rest.sendRedirect(getdir);
+    }
+    
+
+
+    public void markOrderAsDelivered(long dpMob, long orderId, int otp) {
+        DeliveryPartner dp = deliveryPartnerRepository
+                .findByMobno(dpMob)
+                .orElseThrow(() -> new RuntimeException("Delivery Partner Not Found"));
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order Not Found"));
+        if(order.getDeliveryPartner().getId() != dp.getId()){
+            throw new RuntimeException("Order not assigned to this delivery partner");
+        }
     }
 }

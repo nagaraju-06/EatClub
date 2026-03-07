@@ -11,17 +11,6 @@ public class CustomerReq {
 
 	    private List<CustomerDTO> addresses;
 
-//	    public CustomerReqDto(List<CustAddressReqDto> addresses) {
-//	        this.addresses = addresses;
-//	    }
-	//
-//	    public List<CustAddressReqDto> getAddresses() {
-//	        return addresses;
-//	    }
-	//
-//	    public void setAddresses(List<CustAddressReqDto> addresses) {
-//	        this.addresses = addresses;
-//	    }
 
 
 	    public List<CustomerDTO> getAddresses() {
