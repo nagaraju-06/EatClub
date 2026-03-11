@@ -48,82 +48,157 @@ public class Restaurant {
 
 	  
 	    private String type;
+	    
+	    private double wallet;
+	    
+	    private double penalty;
 
-	    // No-arg constructor
-	    public Restaurant() {
-	    }
+		public int getId() {
+			return id;
+		}
 
-	    // All-fields constructor
-	    public Restaurant( String name, long mobno, String mailid,
-	                      Address address, List<Item> menu, String status,
-	                      double ratings, String description, List<Order> orders,
-	                      double packagingFees, String type) {
+		public void setId(int id) {
+			this.id = id;
+		}
 
-	        this.name = name;
-	        this.mobno = mobno;
-	        this.mailid = mailid;
-	        this.address = address;
-	        this.menu = menu;
-	        this.status = status;
-	        this.ratings = ratings;
-	        this.description = description;
-	        this.orders = orders;
-	        this.packagingFees = packagingFees;
-	        this.type = type;
-	    }
+		public String getName() {
+			return name;
+		}
 
-	    // Getters and Setters
-	    public int getId() { return id; }
-	    public void setId(int id) { this.id = id; }
+		public void setName(String name) {
+			this.name = name;
+		}
 
-	    public String getName() { return name; }
-	    public void setName(String name) { this.name = name; }
+		public long getMobno() {
+			return mobno;
+		}
 
-	    public long getMobno() { return mobno; }
-	    public void setMobno(long mobno) { this.mobno = mobno; }
+		public void setMobno(long mobno) {
+			this.mobno = mobno;
+		}
 
-	    public String getMailid() { return mailid; }
-	    public void setMailid(String mailid) { this.mailid = mailid; }
+		public String getMailid() {
+			return mailid;
+		}
 
-	    public Address getAddress() { return address; }
-	    public void setAddress(Address address) { this.address = address; }
+		public void setMailid(String mailid) {
+			this.mailid = mailid;
+		}
 
-	    public List<Item> getMenu() { return menu; }
-	    public void setMenu(List<Item> menu) { this.menu = menu; }
+		public Address getAddress() {
+			return address;
+		}
 
-	    public String getStatus() { return status; }
-	    public void setStatus(String status) { this.status = status; }
+		public void setAddress(Address address) {
+			this.address = address;
+		}
 
-	    public double getRatings() { return ratings; }
-	    public void setRatings(double ratings) { this.ratings = ratings; }
+		public List<Item> getMenu() {
+			return menu;
+		}
 
-	    public String getDescription() { return description; }
-	    public void setDescription(String description) { this.description = description; }
+		public void setMenu(List<Item> menu) {
+			this.menu = menu;
+		}
 
-	    public List<Order> getOrders() { return orders; }
-	    public void setOrders(List<Order> orders) { this.orders = orders; }
+		public String getStatus() {
+			return status;
+		}
 
-	    public Double getPackagingFees() { return packagingFees; }
-	    public void setPackagingFees(Double packagingFees) { this.packagingFees = packagingFees; }
+		public void setStatus(String status) {
+			this.status = status;
+		}
 
-	    public String getType() { return type; }
-	    public void setType(String type) { this.type = type; }
-	    @Override
-	    public String toString() {
-	        return "Restaurant{" +
-	                "id=" + id +
-	                ", name='" + name + '\'' +
-	                ", mobno='" + mobno + '\'' +
-	                ", mailid='" + mailid + '\'' +
-	                ", address=" + address +
-	                ", menu=" + menu +
-	                ", status=" + status +
-	                ", ratings=" + ratings +
-	                ", description='" + description + '\'' +
-	                ", orders=" + orders +
-	                ", packagingFees=" + packagingFees +
-	                ", type=" + type +
-	                '}';
-	    }
+		public double getRatings() {
+			return ratings;
+		}
+
+		public void setRatings(double ratings) {
+			this.ratings = ratings;
+		}
+
+		public String getDescription() {
+			return description;
+		}
+
+		public void setDescription(String description) {
+			this.description = description;
+		}
+
+		public List<Order> getOrders() {
+			return orders;
+		}
+
+		public void setOrders(List<Order> orders) {
+			this.orders = orders;
+		}
+
+		public Double getPackagingFees() {
+			return packagingFees;
+		}
+
+		public void setPackagingFees(Double packagingFees) {
+			this.packagingFees = packagingFees;
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public void setType(String type) {
+			this.type = type;
+		}
+
+		public double getWallet() {
+			return wallet;
+		}
+
+		public void setWallet(double wallet) {
+			this.wallet = wallet;
+		}
+
+		public double getPenalty() {
+			return penalty;
+		}
+
+		public void setPenalty(double penalty) {
+			this.penalty = penalty;
+		}
+
+		public Restaurant(int id, String name, long mobno, String mailid, Address address, List<Item> menu,
+				String status, double ratings, String description, List<Order> orders, Double packagingFees,
+				String type, double wallet, double penalty) {
+			super();
+			this.id = id;
+			this.name = name;
+			this.mobno = mobno;
+			this.mailid = mailid;
+			this.address = address;
+			this.menu = menu;
+			this.status = status;
+			this.ratings = ratings;
+			this.description = description;
+			this.orders = orders;
+			this.packagingFees = packagingFees;
+			this.type = type;
+			this.wallet = wallet;
+			this.penalty = penalty;
+		}
+
+		public Restaurant() {
+			super();
+		}
+
+		@Override
+		public String toString() {
+			return "Restaurant [id=" + id + ", name=" + name + ", mobno=" + mobno + ", mailid=" + mailid + ", address="
+					+ address + ", menu=" + menu + ", status=" + status + ", ratings=" + ratings + ", description="
+					+ description + ", orders=" + orders + ", packagingFees=" + packagingFees + ", type=" + type
+					+ ", wallet=" + wallet + ", penalty=" + penalty + "]";
+		}
+		
+	    
+
+	    
 
 	}

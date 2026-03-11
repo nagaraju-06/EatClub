@@ -39,7 +39,7 @@ public ResponseEntity<ResponseStructure<Restaurant>> findrestaurant(@RequestPara
 public void deleteRestaurant(@PathVariable long mobno) {
     restaurantService.deleteRestaurant(mobno);
 }
-@PatchMapping("/updatestatus{phoneno}")
+@PatchMapping("/updatestatus")
 public void updateStatus(@RequestParam long mobno){
 	restaurantService.updateStatus(mobno);
 	}
