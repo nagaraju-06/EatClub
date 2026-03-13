@@ -91,6 +91,19 @@ public class CustomerController {
 
     }
     
-    
+    @PostMapping("/customer/confirmOrder")
+    public ResponseEntity<ResponseStructure<Order>> confirmOrder(
+            @RequestParam long customerMobNo,
+            @RequestParam int orderId) {
+
+        return customerService.confirmOrder(customerMobNo, orderId);
+    }
+    @GetMapping("/customer/payfororder")
+    public ResponseEntity<ResponseStructure<String>> payfororder(
+            @RequestParam int customerid,
+            @RequestParam int orderid) {
+
+        return customerService.payfororder(customerid, orderid);
+    }
 
 }

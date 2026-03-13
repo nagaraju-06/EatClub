@@ -54,4 +54,12 @@ public Restaurant addItemToMenu(
 
     return restaurantService.addtomenu(item, phone);
 }
+
+@PostMapping("/restaurant/cancelOrder")
+public ResponseEntity<ResponseStructure<String>> cancelOrder(
+        @RequestParam long restaurantMobNo,
+        @RequestParam int orderId) {
+
+    return restaurantService.cancelOrder(restaurantMobNo, orderId);
+}
 }

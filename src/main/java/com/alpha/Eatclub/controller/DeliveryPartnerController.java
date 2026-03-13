@@ -23,6 +23,7 @@ import com.alpha.Eatclub.entity.DeliveryPartner;
 import com.alpha.Eatclub.entity.Restaurant;
 import com.alpha.Eatclub.service.DeliveryPartnerService;
 import com.alpha.Eatclub.service.RedisService;
+import com.alpha.Eatclub.special.ResponseStructure;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -87,7 +88,7 @@ import jakarta.servlet.http.HttpServletResponse;
     @PatchMapping("/deliveryPartner/markOrderAsDelivered")
     public ResponseEntity<String> markOrderAsDelivered(
             @RequestParam long dpMob,
-            @RequestParam long orderId,
+            @RequestParam int orderId,
             @RequestParam int otp) {
 
         deliveryPartnerService.markOrderAsDelivered(dpMob, orderId, otp);
@@ -95,6 +96,14 @@ import jakarta.servlet.http.HttpServletResponse;
         return new ResponseEntity<>("Order Delivered Successfully", HttpStatus.OK);
     }
     
-    
-}
+
+        @PostMapping("/payfororder")
+        public ResponseEntity<ResponseStructure<String>> payForOrder(
+                @RequestParam int customerid,
+                @RequestParam long mobno) {
+
+            return deliveryPartnerService.payForOrder(customerid, mobno);
+        }
+    }
+
 	

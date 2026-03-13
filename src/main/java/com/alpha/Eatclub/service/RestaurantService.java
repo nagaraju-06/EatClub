@@ -137,7 +137,7 @@ public class RestaurantService {
 	    @Autowired
 	    private RedisTemplate<String,String> redisTemplate;
 
-	    public List<String> acceptorder(double latitude, double longitude, long orderid) {
+	    public List<String> acceptorder(double latitude, double longitude, int orderid) {
 	           Order order= orderRepository.findById(orderid).orElseThrow(()->new RuntimeException("Order does not exist"));
 	         List<String> nearbyPartners= redisService.findNearbyPartners(latitude,longitude,5.0);
 	         String orderKey= "order:"+orderid;
@@ -148,5 +148,41 @@ public class RestaurantService {
 	          return nearbyPartners;
 	    }
 
+		public ResponseEntity<ResponseStructure<String>> cancelOrder(long mobno, int orderId) {
+			
+			
+			
+	        Restaurant rest = restaurantRepository.findByMobno(mobno).orElse(null);
+
+	        // find order
+	        Order order = orderRepository.findById((int) orderId).orElse(null);
+
+	        // set order status
+	        order.setStatus("CANCELLED");
+
+	        // penalty calculation (10%)
+	        double penaltyAmount = order.getTotalCost() / 100 * 10;
+
+	        // set penalty
+	        rest.setPenalty(rest.getPenalty() + penaltyAmount);
+
+	        // deduct from wallet
+	        rest.setWallet(rest.getWallet() - penaltyAmount);
+
+	        // block condition
+	        if (rest.getPenalty() >= 1000) {
+	            rest.setStatus("BLOCKED");
+	        }
+
+	        restaurantRepository.save(rest);
+	        orderRepository.save(order);
+
+	        ResponseStructure<String> rs = new ResponseStructure<>();
+	        rs.setStatuscode(HttpStatus.OK.value());
+	        rs.setMessage("Order Cancelled and Penalty Applied");
+	        rs.setData("Success");
+
+	        return new ResponseEntity<>(rs, HttpStatus.OK);
+	    }
 
 	}

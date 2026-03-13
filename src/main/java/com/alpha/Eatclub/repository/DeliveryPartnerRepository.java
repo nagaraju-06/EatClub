@@ -14,6 +14,6 @@ public interface DeliveryPartnerRepository extends JpaRepository<DeliveryPartner
 
 	   Optional<DeliveryPartner> findByMobno(long mobno);
 
-
+	   DeliveryPartner findTopByStatus(String status);
 
 }

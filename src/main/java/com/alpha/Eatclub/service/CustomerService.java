@@ -22,6 +22,7 @@ import com.alpha.Eatclub.dto.CustomerReq;
 import com.alpha.Eatclub.entity.Address;
 import com.alpha.Eatclub.entity.CartItem;
 import com.alpha.Eatclub.entity.Customer;
+import com.alpha.Eatclub.entity.DeliveryPartner;
 import com.alpha.Eatclub.entity.Item;
 import com.alpha.Eatclub.entity.Order;
 import com.alpha.Eatclub.entity.Payment;
@@ -31,6 +32,7 @@ import com.alpha.Eatclub.exceptions.DifferentResturtantItem;
 import com.alpha.Eatclub.exceptions.OrderNotfoundException;
 import com.alpha.Eatclub.repository.CartItemRepository;
 import com.alpha.Eatclub.repository.CustomerRepository;
+import com.alpha.Eatclub.repository.DeliveryPartnerRepository;
 import com.alpha.Eatclub.repository.ItemRepository;
 import com.alpha.Eatclub.repository.OrderRepository;
 import com.alpha.Eatclub.repository.PaymentRepository;
@@ -43,7 +45,7 @@ public class CustomerService {
   @Autowired
   private OrderRepository orderRepository;
     @Autowired
-    private CustomerRepository customerRepository;
+    private CustomerRepository customerrepository;
 
     @Autowired
     private ItemRepository itemRepository;
@@ -55,6 +57,11 @@ public class CustomerService {
     private RestTemplate restTemplate;
     @Autowired
     private PaymentRepository paymentRepository;
+    
+    @Autowired
+    private DeliveryPartnerRepository deliverypartnerrepoo;
+    @Autowired
+    private RestaurantRepository restaurantRepository;
 
     public void adding(CustomerReq customerReqDto) {
         Customer customer = new Customer();
@@ -62,17 +69,17 @@ public class CustomerService {
          customer.setMobno(customerReqDto.getMobno());
          customer.setMailid(customerReqDto.getMailid());
          customer.setGender(customerReqDto.getGender());
-         customerRepository.save(customer);
+         customerrepository.save(customer);
     }
 
     public void deleteCustomer(long mobno) {
-       Customer c= customerRepository.findByMobno(mobno).orElseThrow(()->new RuntimeException("Customer not found"));
-       customerRepository.delete(c);
+       Customer c= customerrepository.findByMobno(mobno).orElseThrow(()->new RuntimeException("Customer not found"));
+       customerrepository.delete(c);
 
     }
 
     public Customer findCustomer(long mobno) {
-        return  customerRepository.findByMobno(mobno).orElseThrow(()->new RuntimeException("Customer not found"));
+        return  customerrepository.findByMobno(mobno).orElseThrow(()->new RuntimeException("Customer not found"));
 
 
 
@@ -81,7 +88,7 @@ public class CustomerService {
     //
 
     public void addtocart(long mobno, long itemid, int quantity) {
-        Customer customer=customerRepository.findByMobno(mobno).orElseThrow(()->new RuntimeException("Customer not found"));
+        Customer customer=customerrepository.findByMobno(mobno).orElseThrow(()->new RuntimeException("Customer not found"));
        Item item =itemRepository.findById(itemid).orElseThrow(()->new RuntimeException("Item not found"));
 
         CartItem c1=new CartItem();
@@ -137,12 +144,12 @@ public class CustomerService {
 
         }
         customer.setAddress(addressList);
-       return customerRepository.save(customer);
+       return customerrepository.save(customer);
     }
 
 
     public CartItem addtocartt(long mobno, long itemid, int quantity) {
-         Customer customer=customerRepository.findByMobno(mobno).orElseThrow(()->new RuntimeException("Customer not found"));
+         Customer customer=customerrepository.findByMobno(mobno).orElseThrow(()->new RuntimeException("Customer not found"));
         Item item = itemRepository.findById(itemid).orElseThrow(() -> new RuntimeException("Item not found"));
 
          List<CartItem> cart=customer.getCartItems();
@@ -151,7 +158,7 @@ public class CustomerService {
              cartItem.setCustomer(customer);
              cartItem.setRestaurant(item.getRestaurant());
              cart.add(cartItem);
-             customerRepository.save(customer);
+             customerrepository.save(customer);
              return cartItem;
 
 
@@ -168,7 +175,7 @@ public class CustomerService {
                if(existingItem.isPresent()){
                    CartItem cartItem=existingItem.get();
                    cartItem.setQuantity(cartItem.getQuantity()+ quantity);
-                   customerRepository.save(customer);
+                   customerrepository.save(customer);
                    return cartItem;
                }
                //new Item from same restaurant
@@ -176,7 +183,7 @@ public class CustomerService {
                    cartItem.setCustomer(customer);
                    cartItem.setRestaurant(item.getRestaurant());
                    cart.add(cartItem);
-            customerRepository.save(customer);
+            customerrepository.save(customer);
                    return cartItem;
 
            }
@@ -185,7 +192,7 @@ public class CustomerService {
         }
 
     public List<CartItem> getAllCart(long mobno) {
-        Customer customer = customerRepository.findByMobno(mobno).orElseThrow(() -> new RuntimeException("Customer not found"));
+        Customer customer = customerrepository.findByMobno(mobno).orElseThrow(() -> new RuntimeException("Customer not found"));
         List<CartItem> cartItems = customer.getCartItems();
         return  cartItems;
 
@@ -193,7 +200,7 @@ public class CustomerService {
     }
 
     public ResponseEntity<ResponseStructure<Order>> placingOrder(long mobno, String paymentType, String addressType, String specialRequest) {
-        Customer customer = customerRepository.findByMobno(mobno).orElseThrow(() -> new CustomerNotFound("Cust not found"));
+        Customer customer = customerrepository.findByMobno(mobno).orElseThrow(() -> new CustomerNotFound("Cust not found"));
 
         if(customer.getCartItems().isEmpty()){
             throw new RuntimeException("Cart is empty");
@@ -267,26 +274,140 @@ public class CustomerService {
     }
 
 
-    public ResponseEntity<ResponseStructure<String>> denyPlacingOrder(long orderid) {
-    	Order order=orderRepository.findById(orderid).orElseThrow(() -> new OrderNotfoundException("Order not found with this id"));
-    	order.setStatus("Cancelled");
-    	orderRepository.save(order);
-    	ResponseStructure<String>rs=new ResponseStructure<>();
-    	rs.setData("Denied");
-    	rs.setMessage("Order has been Cancelled Succesfully");
-    	return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.OK);
+    public ResponseEntity<ResponseStructure<String>> denyPlacingOrder(int orderid) {
+
+        Order order = orderRepository.findById(orderid)
+                .orElseThrow(() -> new OrderNotfoundException("Order not found with this id"));
+
+        order.setStatus("Cancelled");
+        orderRepository.save(order);
+
+        ResponseStructure<String> rs = new ResponseStructure<>();
+        rs.setData("Denied");
+        rs.setMessage("Order has been Cancelled Successfully");
+
+        return new ResponseEntity<>(rs, HttpStatus.OK);
     }
 
-    public ResponseEntity<ResponseStructure<String>> confirmPlacingOrder(long orderid) {
-        Order order =orderRepository.findById(orderid).orElseThrow(() -> new OrderNotfoundException("Order not found with this id"));
-        Customer customer=order.getCustomer();
-        Restaurant restaurant=customer.getCartItems().get(0).getItem().getRestaurant();
+    public ResponseEntity<ResponseStructure<String>> confirmPlacingOrder(int orderid) {
+
+        Order order = orderRepository.findById(Integer.valueOf(orderid))
+                .orElseThrow(() -> new OrderNotfoundException("Order not found with this id"));
+
+        Customer customer = order.getCustomer();
+        Restaurant restaurant = customer.getCartItems().get(0).getItem().getRestaurant();
+
         order.setRestaurant(restaurant);
         order.setStatus("Placed");
+
         orderRepository.save(order);
-        ResponseStructure<String> rs =new ResponseStructure<>();
+
+        ResponseStructure<String> rs = new ResponseStructure<>();
         rs.setData("Success");
         rs.setMessage("Order Placed Successfully");
-        return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.OK);
+
+        return new ResponseEntity<>(rs, HttpStatus.OK);
+    }
+    public ResponseEntity<ResponseStructure<Order>> confirmOrder(long customerMobNo, int orderId) {
+
+        // find customer
+        Customer cust = customerrepository.findByMobno(customerMobNo).orElse(null);
+
+        // find order
+        Order order = orderRepository.findById((int) orderId).orElse(null);
+
+        // get restaurant
+        Restaurant rest = order.getRestaurant();
+
+        // check delivery partner
+        if (order.getDeliveryPartner() == null) {
+            order.setStatus("CONFIRMED");
+        }
+
+        // payment type check
+        if (order.getPayment().getType().equalsIgnoreCase("ONLINE")) {
+
+            // deduct from customer wallet
+            cust.setWallet(cust.getWallet() - order.getTotalCost());
+
+            // add money to restaurant wallet
+            rest.setWallet(rest.getWallet() + order.getTotalCost());
+
+        } 
+        else if (order.getPayment().getType().equalsIgnoreCase("COD")) {
+
+            // find delivery partner (example logic
+        	DeliveryPartner dp = deliverypartnerrepoo.findTopByStatus("AVAILABLE");
+
+            order.setDeliveryPartner(dp);
+        }
+
+        // save updates
+        customerrepository.save(cust);
+        restaurantRepository.save(rest);
+        orderRepository.save(order);
+
+        ResponseStructure<Order> rs = new ResponseStructure<>();
+        rs.setStatuscode(HttpStatus.OK.value());
+        rs.setMessage("Order Confirmed Successfully");
+        rs.setData(order);
+
+        return new ResponseEntity<>(rs, HttpStatus.OK);
+    }
+
+
+    public ResponseEntity<ResponseStructure<String>> payfororder(int customerid, int orderid) {
+
+        ResponseStructure<String> rs = new ResponseStructure<>();
+
+        Customer cust = customerrepository.findById(customerid).orElse(null);
+        Order order = orderRepository.findById(orderid).orElse(null);
+
+        if (cust == null || order == null) {
+            rs.setStatuscode(HttpStatus.NOT_FOUND.value());
+            rs.setMessage("Customer or Order not found");
+            rs.setData(null);
+
+            return new ResponseEntity<>(rs, HttpStatus.NOT_FOUND);
+        }
+
+        // get order amount
+        double amount = order.getTotalCost();
+
+        // check payment type
+        String paymentType = order.getPayment().getType();
+
+        if (paymentType.equalsIgnoreCase("ONLINE")) {
+
+            // deduct wallet amount
+            cust.setWallet(cust.getWallet() - amount);
+
+            order.setStatus("CONFIRMED");
+        }
+
+        else if (paymentType.equalsIgnoreCase("COD")) {
+
+            DeliveryPartner dp = deliverypartnerrepoo.findTopByStatus("AVAILABLE");
+
+            if (dp != null) {
+                order.setDeliveryPartner(dp);
+                dp.setStatus("BUSY");
+            }
+
+            order.setStatus("CONFIRMED");
+        }
+
+        customerrepository.save(cust);
+        orderRepository.save(order);
+
+        rs.setStatuscode(HttpStatus.OK.value());
+        rs.setMessage("Order placed successfully");
+        rs.setData("Payment completed for order id " + orderid);
+
+        return new ResponseEntity<>(rs, HttpStatus.OK);
     }
 }
+
+
+
+	

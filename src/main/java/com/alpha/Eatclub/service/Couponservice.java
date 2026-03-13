@@ -35,13 +35,13 @@ public class Couponservice {
     }
     
     
- // DELETE COUPON
+
     public ResponseEntity<ResponseStructure<String>> deleteCoupon(Integer couponId){
 
         Coupon coupon = couponrepoo.findById(couponId)
                 .orElseThrow(() -> new CouponNotFoundException("Coupon not found"));
 
-        // Check if coupon already used
+        
         if(couponrederepoo.existsByCoupon(coupon)){
             throw new CouponInvalidException("Coupon already used by customers, cannot delete");
         }
@@ -56,7 +56,7 @@ public class Couponservice {
         return new ResponseEntity<>(rs,HttpStatus.OK);
     }
 
- // UPDATE COUPON
+
 
     public ResponseEntity<ResponseStructure<Coupon>> updateCoupon(
             Integer couponId,
@@ -67,12 +67,11 @@ public class Couponservice {
 
         boolean used = couponrederepoo.existsByCoupon(coupon);
 
-        // If nobody used coupon → extend expiry
+       
         if(!used){
             coupon.setExpiryDate(LocalDate.parse(expiryDate));
         }
         else{
-            // If used → reduce maxCoupons
             if(coupon.getMaxCoupons() > 0){
                 coupon.setMaxCoupons(coupon.getMaxCoupons() - 1);
             }
@@ -89,12 +88,6 @@ public class Couponservice {
     }
 
 
-
-    //Finding the Coupon
-
-
-
-    // FIND COUPON
 
     public ResponseEntity<ResponseStructure<Coupon>> findCoupon(Integer couponId){
 

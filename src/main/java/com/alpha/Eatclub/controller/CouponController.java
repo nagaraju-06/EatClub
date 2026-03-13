@@ -16,7 +16,7 @@ public class CouponController {
     private Couponservice couponservice;
 
     
-    @PostMapping("/create")
+    @PostMapping("/createcupon")
     public ResponseEntity<ResponseStructure<Coupon>> createCoupon(@RequestBody Coupon coupon){
         return couponservice.createCoupon(coupon);
     }
@@ -28,7 +28,7 @@ public class CouponController {
     }
 
     
-    @PutMapping("/update/{couponId}")
+    @PatchMapping("/update/{couponId}")
     public ResponseEntity<ResponseStructure<Coupon>> updateCoupon(
             @PathVariable Integer couponId,
             @RequestParam String expiryDate){

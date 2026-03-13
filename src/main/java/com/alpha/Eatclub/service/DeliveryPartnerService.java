@@ -10,11 +10,16 @@ import org.springframework.web.client.RestTemplate;
 import com.alpha.Eatclub.dto.DeliveryPartnerDTO;
 
 import com.alpha.Eatclub.entity.Address;
+import com.alpha.Eatclub.entity.Customer;
 import com.alpha.Eatclub.entity.DeliveryPartner;
 import com.alpha.Eatclub.entity.Order;
+import com.alpha.Eatclub.entity.Restaurant;
 import com.alpha.Eatclub.repository.AddressRepository;
+import com.alpha.Eatclub.repository.CustomerRepository;
 import com.alpha.Eatclub.repository.DeliveryPartnerRepository;
 import com.alpha.Eatclub.repository.OrderRepository;
+import com.alpha.Eatclub.repository.RestaurantRepository;
+import com.alpha.Eatclub.special.ResponseStructure;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -33,6 +38,12 @@ public class DeliveryPartnerService {
 
     @Autowired
     private AddressRepository addressRepository;
+    
+    @Autowired
+    private CustomerRepository customerrepoo;
+    
+    @Autowired
+    private RestaurantRepository resturtantsrepoo;
 
 
     public void adding(DeliveryPartnerDTO deliveryPartnerDto) {
@@ -101,7 +112,7 @@ public class DeliveryPartnerService {
     @Autowired
     private OrderRepository orderRepository;
 
-    public boolean acceptorder(long orderid, Integer partnerid) {
+    public boolean acceptorder(int orderid, Integer partnerid) {
         Order order = orderRepository.findById(orderid).orElseThrow(() -> new RuntimeException("Order not found"));
         DeliveryPartner deliveryPartner = deliveryPartnerRepository.findById(partnerid).orElseThrow(()
                 -> new RuntimeException("partner not found"));
@@ -128,7 +139,7 @@ public class DeliveryPartnerService {
     
 
 
-    public void markOrderAsDelivered(long dpMob, long orderId, int otp) {
+    public void markOrderAsDelivered(long dpMob, int orderId, int otp) {
         DeliveryPartner dp = deliveryPartnerRepository
                 .findByMobno(dpMob)
                 .orElseThrow(() -> new RuntimeException("Delivery Partner Not Found"));
@@ -139,4 +150,23 @@ public class DeliveryPartnerService {
             throw new RuntimeException("Order not assigned to this delivery partner");
         }
     }
+
+
+
+
+	public ResponseEntity<ResponseStructure<String>> payForOrder(int customerid, long restaurtantid) {
+		Customer customer=customerrepoo.findById(customerid).orElse(null);
+		Restaurant rest = resturtantsrepoo.findById(restaurtantid).orElse(null);
+		ResponseStructure<String> rs=new ResponseStructure<>();
+		if(customer==null || rest==null) {
+			rs.setStatuscode(404);
+			rs.setMessage("Customer or restaurtant not found");
+			rs.setData(null);
+			return new ResponseEntity<>(rs,HttpStatus.NOT_FOUND);
+		}
+		rs.setStatuscode(200);
+		rs.setMessage("Payment Succesfull");
+		rs.setData("Order Paid Succesfull");
+		return new ResponseEntity<>(rs,HttpStatus.OK);
+	}
 }
