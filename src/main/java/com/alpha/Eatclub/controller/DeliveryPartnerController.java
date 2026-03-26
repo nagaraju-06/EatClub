@@ -30,6 +30,7 @@ import com.alpha.Eatclub.service.RestaurantService;
 import com.alpha.Eatclub.special.ResponseStructure;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 
 @RestController
 	@RequestMapping("/deliverypartner")
@@ -115,8 +116,8 @@ import jakarta.servlet.http.HttpServletResponse;
         }
         
         
-        @PostMapping("/request/restuartant")
-        public void RequestRestuartant(@RequestBody DeliveryPartnerDTO delPart) {
+        @PostMapping("/request/deliveryPartner")
+        public void RequestRestuartant(@RequestBody @Valid DeliveryPartnerDTO delPart) {
         	DeliveryPartnerService.RequestDeliveryPartner(delPart);
         }
     }

@@ -2,11 +2,13 @@ package com.alpha.Eatclub.dto;
 
 import com.alpha.Eatclub.special.LocationCordinates;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 public class DeliveryPartnerDTO {
 	@NotBlank(message = "Enter The Name")
@@ -14,12 +16,14 @@ public class DeliveryPartnerDTO {
 	 @Min(value = 1000000000L, message="mobno should not Longer Than 1000000000L")
 	 @Max(value = 9999999999L , message="mobno should not Longer Than 9999999999L")
 	    private long mobno;
-	 @Email( message = "Enter The Valid Email")
+	 @Email(message = "Enter valid email")
+	 @NotBlank(message = "Email required")
 	    private String email;
 	 @NotEmpty(message= "Enter The Valid VechileNo")
 	    private String vehicleNo;
-	 @NotEmpty(message= "Enter The Valid Locations")
-	    private LocationCordinates locationCordinate;
+	 @Valid
+	 @NotNull(message = "Location required")
+	 private LocationCordinates locationCordinate;
 		public String getName() {
 			return name;
 		}

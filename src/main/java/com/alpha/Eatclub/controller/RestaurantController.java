@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alpha.Eatclub.special.ResponseStructure;
+
+import jakarta.validation.Valid;
+
 import com.alpha.Eatclub.dto.RestaurantDTO;
 import com.alpha.Eatclub.entity.Item;
 import com.alpha.Eatclub.entity.Restaurant;
@@ -65,7 +68,7 @@ public ResponseEntity<ResponseStructure<String>> cancelOrder(
 }
 
  @PostMapping("/request/restuartant")
-public void RequestRestuartant(@RequestBody RestaurantDTO restaurtant) {
+public void RequestRestuartant(@RequestBody  @Valid RestaurantDTO restaurtant) {
 	RestaurantService.RequestRestuartant(restaurtant);
 }
 }
