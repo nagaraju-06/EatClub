@@ -406,6 +406,12 @@ public class CustomerService {
 
         return new ResponseEntity<>(rs, HttpStatus.OK);
     }
+
+	public void reqCustomerToValidData(CustomerReq custReq) {
+		System.out.println(custReq );
+		System.out.println("Data Is Valid");
+		
+	}
 }
 
 

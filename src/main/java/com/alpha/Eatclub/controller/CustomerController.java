@@ -16,6 +16,9 @@ import com.alpha.Eatclub.entity.Order;
 import com.alpha.Eatclub.entity.Restaurant;
 import com.alpha.Eatclub.service.CustomerService;
 import com.alpha.Eatclub.special.ResponseStructure;
+
+import jakarta.validation.Valid;
+
 import com.alpha.Eatclub.service.RestaurantService;
 
 @RestController
@@ -29,10 +32,10 @@ public class CustomerController {
 
 
 
-    @PostMapping("/customer/register")
-    public Customer createCustomer(@RequestBody CustomerReq customerReqDto) {
-        return customerService.saveCustomer(customerReqDto);
-    }
+//    @PostMapping("/customer/register")
+//    public Customer createCustomer(@RequestBody  @Valid CustomerReq customerReqDto) {
+//        return customerService.saveCustomer(customerReqDto);
+//    }
 
     @DeleteMapping("/delete/customer")
     public void deleteCustomer(@RequestParam long mobno) {
@@ -106,4 +109,8 @@ public class CustomerController {
         return customerService.payfororder(customerid, orderid);
     }
 
+    @PostMapping("/request/custumer")
+    public void reqCustomer(@RequestBody  @Valid CustomerReq custReq) {
+    	customerService.reqCustomerToValidData(custReq);
+    }
 }

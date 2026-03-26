@@ -2,10 +2,18 @@ package com.alpha.Eatclub.dto;
 
 import java.util.List;
 
-public class CustomerReq {
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 
+public class CustomerReq {
+	@NotBlank(message = "Enter The name")
 	 private String name;
+	 @Min(value = 1000000000L, message="mobno should not Longer Than 1000000000L")
+	 @Max(value = 9999999999L , message="mobno should not Longer Than 9999999999L")
 	    private long mobno;
+	 @NotEmpty(message= "Enter The Valid Email")
 	    private String mailid;
 	    private  String gender;
 

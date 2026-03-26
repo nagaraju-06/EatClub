@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.alpha.Eatclub.dto.DeliveryPartnerDTO;
-
+import com.alpha.Eatclub.dto.RestaurantDTO;
 import com.alpha.Eatclub.entity.Address;
 import com.alpha.Eatclub.entity.Customer;
 import com.alpha.Eatclub.entity.DeliveryPartner;
@@ -169,4 +169,59 @@ public class DeliveryPartnerService {
 		rs.setData("Order Paid Succesfull");
 		return new ResponseEntity<>(rs,HttpStatus.OK);
 	}
+
+
+	public ResponseEntity<ResponseStructure<String>> successfulDelivery(long deliverypartnerMobno, int orderid) {
+
+		DeliveryPartner dp = deliveryPartnerRepository.findByMobno(deliverypartnerMobno).orElse(null);
+
+	    if (dp == null) {
+	        throw new RuntimeException("Delivery Partner not found");
+	    }
+
+	    Order order = orderRepository.findById(orderid).orElse(null);
+
+	    if (order == null) {
+	        throw new RuntimeException("Order not found");
+	    }
+
+	    Restaurant restaurant = order.getRestaurant();
+
+	    // Update status
+	    order.setStatus("Delivered");
+
+	    double orderAmount = order.getTotalCost();
+	    double deliveryCharge = order.getDelivery_charges();
+
+	    double amount = orderAmount - deliveryCharge;
+
+	    double restaurantShare = amount * 85 / 100;
+	    double dpShare = (amount * 10 / 100) + deliveryCharge;
+
+	    // Update wallets
+	    restaurant.setWallet(restaurant.getWallet() + restaurantShare);
+	    dp.setWallet(dp.getWallet() + dpShare);
+
+	    // Save
+	    orderRepository.save(order);
+	    resturtantsrepoo.save(restaurant);
+	    deliveryPartnerRepository.save(dp);
+
+	    ResponseStructure<String> rs = new ResponseStructure<>();
+	    rs.setStatuscode(HttpStatus.OK.value());
+	    rs.setMessage("Order Delivered Successfully");
+	    rs.setData("Payment distributed successfully");
+
+	    return new ResponseEntity<>(rs, HttpStatus.OK);
+	}
+
+
+	public static void RequestDeliveryPartner(DeliveryPartnerDTO delPart) {
+		System.out.println(delPart);
+		System.out.println("Data Is Valid");
+		
+	}
+
+
+
 }

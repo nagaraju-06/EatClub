@@ -1,13 +1,21 @@
 package com.alpha.Eatclub.dto;
 
+import jakarta.validation.constraints.NotEmpty;
 
 public class CustomerDTO {
+	@NotEmpty(message= "Enter The Valid flatNumber")
     private String flatNumber;
+	@NotEmpty(message= "Enter The Valid Buidling name")
     private String buildingName;
+	@NotEmpty(message= "Enter The Valid Street")
     private String street;
+	@NotEmpty(message= "Enter The Valid City")
     private String city;
+	@NotEmpty(message= "Enter The Valid State")
     private String state;
+	@NotEmpty(message= "Enter The Valid Pincodel")
     private String pincode;
+	@NotEmpty(message= "Enter The Valid AddressType")
     private String addressType;
     private Boolean isDefault;
 

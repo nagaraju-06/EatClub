@@ -5,9 +5,14 @@ import java.util.List;
 import com.alpha.Eatclub.entity.CartItem;
 import com.alpha.Eatclub.entity.Coupon;
 
+import jakarta.validation.constraints.NotEmpty;
+
 public class CartsWithCoupon {
+	@NotEmpty(message= "Enter The Valid CartItems")
 	private List<CartItem> cartitems;
+	@NotEmpty(message= "Enter The Valid Cartotal")
 	private double cartTotal;
+	@NotEmpty(message= "Enter The Valid Coupon")
 	private List<Coupon> coupon;
 	public List<CartItem> getCartitems() {
 		return cartitems;

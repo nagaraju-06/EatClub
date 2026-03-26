@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.alpha.Eatclub.dto.CartsWithCoupon;
+import com.alpha.Eatclub.dto.RestaurantDTO;
 import com.alpha.Eatclub.entity.Coupon;
 import com.alpha.Eatclub.exceptions.CouponInvalidException;
 import com.alpha.Eatclub.exceptions.CouponNotFoundException;
@@ -101,6 +103,19 @@ public class Couponservice {
 
         return new ResponseEntity<>(rs,HttpStatus.OK);
     }
+
+
+
+	public static void RequestCoupon(CartsWithCoupon cartsWithCou) {
+		System.out.println(cartsWithCou );
+		System.out.println("Data Is Valid");
+		
+		
+	}
+
+
+
+
 
 	
 

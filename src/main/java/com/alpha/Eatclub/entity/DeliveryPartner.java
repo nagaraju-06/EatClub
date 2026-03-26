@@ -26,92 +26,90 @@ public class DeliveryPartner {
     @Column(unique=true)
     private String vehicleNo;
     private String status;
+    private double wallet;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public long getMobno() {
+		return mobno;
+	}
+	public void setMobno(long mobno) {
+		this.mobno = mobno;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public double getRating() {
+		return rating;
+	}
+	public void setRating(double rating) {
+		this.rating = rating;
+	}
+	public Address getAddress() {
+		return address;
+	}
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+	public List<Order> getOrders() {
+		return orders;
+	}
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
+	}
+	public String getVehicleNo() {
+		return vehicleNo;
+	}
+	public void setVehicleNo(String vehicleNo) {
+		this.vehicleNo = vehicleNo;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public double getWallet() {
+		return wallet;
+	}
+	public void setWallet(double wallet) {
+		this.wallet = wallet;
+	}
+	public DeliveryPartner(int id, String name, long mobno, String email, double rating, Address address,
+			List<Order> orders, String vehicleNo, String status, double wallet) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.mobno = mobno;
+		this.email = email;
+		this.rating = rating;
+		this.address = address;
+		this.orders = orders;
+		this.vehicleNo = vehicleNo;
+		this.status = status;
+		this.wallet = wallet;
+	}
+	public DeliveryPartner() {
+		super();
+	}
+	@Override
+	public String toString() {
+		return "DeliveryPartner [id=" + id + ", name=" + name + ", mobno=" + mobno + ", email=" + email + ", rating="
+				+ rating + ", address=" + address + ", orders=" + orders + ", vehicleNo=" + vehicleNo + ", status="
+				+ status + ", wallet=" + wallet + "]";
+	}
 
-    public DeliveryPartner(Address address, String email, int id, long mobno, String name,
-                           List<Order> orders, double rating, String status, String vehicleNo) {
-        this.address = address;
-        this.email = email;
-        this.id = id;
-        this.mobno = mobno;
-        this.name = name;
-        this.orders = orders;
-        this.rating = rating;
-        this.status = status;
-        this.vehicleNo = vehicleNo;
-    }
-
-    public DeliveryPartner() {
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public long getMobno() {
-        return mobno;
-    }
-
-    public void setMobno(long mobno) {
-        this.mobno = mobno;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
-
-    public double getRating() {
-        return rating;
-    }
-
-    public void setRating(double rating) {
-        this.rating = rating;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getVehicleNo() {
-        return vehicleNo;
-    }
-
-    public void setVehicleNo(String vehicleNo) {
-        this.vehicleNo = vehicleNo;
-    }
+    
 }

@@ -17,6 +17,7 @@ import com.alpha.Eatclub.special.ResponseStructure;
 import com.alpha.Eatclub.dto.RestaurantDTO;
 import com.alpha.Eatclub.entity.Item;
 import com.alpha.Eatclub.entity.Restaurant;
+import com.alpha.Eatclub.service.DeliveryPartnerService;
 import com.alpha.Eatclub.service.RestaurantService;
 
 @RestController
@@ -61,5 +62,10 @@ public ResponseEntity<ResponseStructure<String>> cancelOrder(
         @RequestParam int orderId) {
 
     return restaurantService.cancelOrder(restaurantMobNo, orderId);
+}
+
+ @PostMapping("/request/restuartant")
+public void RequestRestuartant(@RequestBody RestaurantDTO restaurtant) {
+	RestaurantService.RequestRestuartant(restaurtant);
 }
 }

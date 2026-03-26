@@ -1,14 +1,24 @@
 package com.alpha.Eatclub.dto;
 
+import jakarta.validation.constraints.NotEmpty;
+
 public class OrdersNeedsConcentdto {
 	private Integer orderid;
+	@NotEmpty(message= "Enter The Valid RestuartantName")
 	private String restaurtantname;
+	@NotEmpty(message= "Enter The Valid ItemCost")
 	private double itemcost;
+	@NotEmpty(message= "Enter The Valid DeliveryCharges")
 	private double deliverycharges;
+	@NotEmpty(message= "Enter The Valid Packingcharges")
 	private double packingfees;
+	@NotEmpty(message= "Enter The Valid Tax")
 	private double tax;
+	@NotEmpty(message= "Enter The Valid PlatformFees")
 	private double platformfees;
+	@NotEmpty(message= "Enter The Valid TotalCost")
 	private double totalcost;
+	@NotEmpty(message= "Enter The Valid Distance")
 	private double distance;
 	public Integer getOrderid() {
 		return orderid;

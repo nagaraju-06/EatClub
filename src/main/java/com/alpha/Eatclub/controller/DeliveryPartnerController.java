@@ -18,11 +18,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alpha.Eatclub.dto.CartsWithCoupon;
 import com.alpha.Eatclub.dto.DeliveryPartnerDTO;
+import com.alpha.Eatclub.dto.RestaurantDTO;
 import com.alpha.Eatclub.entity.DeliveryPartner;
 import com.alpha.Eatclub.entity.Restaurant;
+import com.alpha.Eatclub.service.Couponservice;
 import com.alpha.Eatclub.service.DeliveryPartnerService;
 import com.alpha.Eatclub.service.RedisService;
+import com.alpha.Eatclub.service.RestaurantService;
 import com.alpha.Eatclub.special.ResponseStructure;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -103,6 +107,17 @@ import jakarta.servlet.http.HttpServletResponse;
                 @RequestParam long mobno) {
 
             return deliveryPartnerService.payForOrder(customerid, mobno);
+        }
+        
+        @PatchMapping("/successfulDelivery")
+        public ResponseEntity<ResponseStructure<String>> successfulDelivery(@RequestParam long deliverypartnerMobno, @RequestParam int orderid){
+        	return deliveryPartnerService.successfulDelivery(deliverypartnerMobno,orderid);
+        }
+        
+        
+        @PostMapping("/request/restuartant")
+        public void RequestRestuartant(@RequestBody DeliveryPartnerDTO delPart) {
+        	DeliveryPartnerService.RequestDeliveryPartner(delPart);
         }
     }
 

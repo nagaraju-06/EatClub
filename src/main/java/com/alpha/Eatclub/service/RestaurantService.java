@@ -185,4 +185,10 @@ public class RestaurantService {
 	        return new ResponseEntity<>(rs, HttpStatus.OK);
 	    }
 
+		public static void RequestRestuartant(RestaurantDTO restaurtant) {
+		System.out.println(restaurtant);
+		System.out.println("Data Is Valid");
+			
+		}
+
 	}

@@ -2,6 +2,8 @@ package com.alpha.Eatclub.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestControllerAdvice
@@ -35,4 +38,15 @@ public class GlobalExceptionHandler {
 	    public ResponseEntity<String> handeOrder(OrderNotfoundException ex){
 	        return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
 	    }
+	    @ExceptionHandler(MethodArgumentNotValidException.class)
+	    public Map<String, String> handleMethodArgumentNotValid(MethodArgumentNotValidException e){
+	    Map<String, String>map=new HashMap<String, String>();
+	    List<ObjectError>objerr= e.getAllErrors();
+	    for(ObjectError objectError : objerr) {
+	    	FieldError fr = (FieldError) objectError;
+	    	map.put(fr.getField(), fr.getDefaultMessage());
+	    }
+	    return map;
+	    
+}
 }

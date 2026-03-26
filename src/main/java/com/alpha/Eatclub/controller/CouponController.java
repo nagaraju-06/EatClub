@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.alpha.Eatclub.dto.CartsWithCoupon;
 import com.alpha.Eatclub.entity.Coupon;
 import com.alpha.Eatclub.service.Couponservice;
 import com.alpha.Eatclub.special.ResponseStructure;
@@ -40,5 +41,9 @@ public class CouponController {
     @GetMapping("/find/{couponId}")
     public ResponseEntity<ResponseStructure<Coupon>> findCoupon(@PathVariable Integer couponId){
         return couponservice.findCoupon(couponId);
+    }
+    @PostMapping("/request/coupon")
+    public void RequestCoupon(@RequestBody CartsWithCoupon cartsWithCou) {
+    	Couponservice.RequestCoupon(cartsWithCou);
     }
 }
