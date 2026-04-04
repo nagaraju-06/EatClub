@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
+
 import com.alpha.Eatclub.dto.CustomerDTO;
 import com.alpha.Eatclub.dto.CustomerReq;
 import com.alpha.Eatclub.entity.Address;
@@ -62,6 +63,9 @@ public class CustomerService {
     private DeliveryPartnerRepository deliverypartnerrepoo;
     @Autowired
     private RestaurantRepository restaurantRepository;
+    
+    @Autowired
+    private EmailService emailService;
 
     public void adding(CustomerReq customerReqDto) {
         Customer customer = new Customer();
@@ -412,6 +416,29 @@ public class CustomerService {
 		System.out.println("Data Is Valid");
 		
 	}
+
+	public ResponseEntity<ResponseStructure<Customer>> register(CustomerReq custdto) {
+		Customer customer = new Customer();
+		customer.setName(custdto.getName());
+		customer.setMailid(custdto.getMailid());
+		customer.setMobno(custdto.getMobno());
+		
+		
+		Customer savedcust=customerrepository.save(customer);
+		try {
+            emailService.sendRegistrationMail(savedcust.getMailid(), savedcust.getName());
+        } catch (Exception e) {
+            System.out.println("Email sending failed: " + e.getMessage());
+        }
+		
+        ResponseStructure<Customer> structure = new ResponseStructure<>();
+        structure.setMessage("Customer Registered Successfully");
+        structure.setData(customer);
+
+        return new ResponseEntity<>(structure, HttpStatus.CREATED);
+	}
+
+	
 }
 
 

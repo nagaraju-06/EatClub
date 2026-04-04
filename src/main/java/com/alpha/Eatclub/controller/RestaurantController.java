@@ -2,7 +2,7 @@ package com.alpha.Eatclub.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,10 +28,10 @@ import com.alpha.Eatclub.service.RestaurantService;
 public class RestaurantController {
 	@Autowired
 	private RestaurantService restaurantService;
-@PostMapping("/register")
-public void register (@RequestBody RestaurantDTO restaurantdto){
-	restaurantService.adding(restaurantdto);
-}
+//@PostMapping("/register")
+//public void register (@RequestBody RestaurantDTO restaurantdto){
+//	restaurantService.adding(restaurantdto);
+//}
 
 @GetMapping("/findrestaurant/{phoneno}")
 public ResponseEntity<ResponseStructure<Restaurant>> findrestaurant(@RequestParam long phone){
@@ -71,4 +71,17 @@ public ResponseEntity<ResponseStructure<String>> cancelOrder(
 public void RequestRestuartant(@RequestBody  @Valid RestaurantDTO restaurtant) {
 	RestaurantService.RequestRestuartant(restaurtant);
 }
+ 
+ @CrossOrigin(origins = "*") // ✅ ADD THIS
+ 
+     @Autowired
+    
+
+     @PostMapping("/register")
+     public ResponseEntity<String> register(@RequestBody RestaurantDTO restaurantdto){
+         
+         restaurantService.adding(restaurantdto);
+         
+         return ResponseEntity.ok("Restaurant Registered Successfully");
+     }
 }

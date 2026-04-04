@@ -113,4 +113,9 @@ public class CustomerController {
     public void reqCustomer(@RequestBody  @Valid CustomerReq custReq) {
     	customerService.reqCustomerToValidData(custReq);
     }
+    
+    @PostMapping("/registerCustomer")
+    public ResponseEntity<ResponseStructure<Customer>>registerCustomer(@RequestBody CustomerReq custdto){
+    	return customerService.register(custdto);
+    }
 }
